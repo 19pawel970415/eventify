@@ -13,7 +13,7 @@ function App() {
       })
       .catch(() => setError('Błąd połączenia'));
   }, []);
-  
+  //bvhvbb
 
   if (error) {
     return <h1>{error}</h1>;
