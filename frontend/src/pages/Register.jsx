@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-//import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 import React from 'react';
@@ -173,7 +173,7 @@ function Register() {
                     )}
                   </div>
                   <div className="card-footer text-center py-3">
-                    <div className="small"><Link to="/login">Masz już konto? Zaloguj się</Link></div>
+                    <div className="small"><Link to="/Login">Masz już konto? Zaloguj się</Link></div>
                   </div>
                 </div>
               </div>
@@ -201,33 +201,6 @@ function Register() {
       </footer>
     </div>
   );
-}
-  function App() {
-    const [events, setEvents] = useState(null);
-    const [error, setError] = useState('');
-  
-    useEffect(() => {
-      fetch('http://localhost:8085/api/events/sample')
-        .then(res => res.json())
-        .then(data => {
-          console.log('Odebrane dane:', data);
-          setEvents(data);
-        })
-        .catch(() => setError('Błąd połączenia'));
-    }, []);
-  
-    return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home events={events} error={error} />} />
-
-  
-          <Route path="/EventsList" element={<EventsList />} />
-  
-          <Route path="/Login" element={<Login />} />
-        </Routes>
-      </Router>
-    );
 }
 
 export default Register;
