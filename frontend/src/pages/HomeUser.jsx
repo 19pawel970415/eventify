@@ -1,14 +1,16 @@
+// Home.jsx
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';  // <-- dodane useNavigate
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 import React from 'react';
+import AddEvent from './AddEvent';
+import EventsList from './EventsList';
 
-function EventsList() {
+function HomeUser() {
   const [events, setEvents] = useState(null);
   const [error, setError] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  
 
   useEffect(() => {
     fetch('http://localhost:8085/api/events/sample')
@@ -20,21 +22,14 @@ function EventsList() {
       .catch(() => setError('Błąd połączenia'));
   }, []);
 
-  const cities = [...new Set(events?.map(evt => evt.city))];
 
   if (error) {
     return <h1>{error}</h1>;
   }
+
   if (!events) {
     return <h1>Ładuję wydarzenia...</h1>;
   }
-
-  // Filtrowanie eventów po mieście i dacie
-  const filteredEvents = events.filter(evt => {
-    const matchesCity = selectedCity ? evt.city === selectedCity : true;
-    const matchesDate = selectedDate ? evt.event_date.startsWith(selectedDate) : true;
-    return matchesCity && matchesDate;
-  });
 
   return (
     <div className="d-flex flex-column h-100">
@@ -57,13 +52,21 @@ function EventsList() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">Strona główna</Link>
+                  <Link className="nav-link" to="/">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/addevent">Dodaj wydarzenie</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/eventslist">Lista wydarzeń</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/myevents">Moje wydarzenia</Link> {/* NOWA ZAKŁADKA */}
                 </li>
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Konto</a>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                    <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
-                    <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
+                    <li><Link className="dropdown-item" to="/">Wyloguj się</Link></li>
                   </ul>
                 </li>
               </ul>
@@ -77,9 +80,9 @@ function EventsList() {
             <div className="row gx-5 align-items-center justify-content-center">
               <div className="col-lg-8 col-xl-7 col-xxl-6">
                 <div className="my-5 text-center text-xl-start">
-                  <h1 className="display-5 fw-bolder text-white mb-2">Lista wydarzeń</h1>
+                  <h1 className="display-5 fw-bolder text-white mb-2">Twoje wydarzenia</h1>
                   <p className="lead fw-normal text-white-50 mb-4">
-                    Wyszukuj wydarzenia według miasta i daty!
+                    Poniżej znajdziesz listę wszystkich wydarzeń pobranych z bazy danych.
                   </p>
                 </div>
               </div>
@@ -87,52 +90,20 @@ function EventsList() {
           </div>
         </header>
 
-        {/* Filters */}
-        <section className="py-3">
-          <div className="container px-5">
-            <div className="row justify-content-center g-3">
-              <div className="col-md-4">
-                <select
-                  className="form-select"
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                >
-                  <option value="">Wszystkie miasta</option>
-                  {cities.map((city, index) => (
-                    <option key={index} value={city}>{city}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-4">
-                <input
-                  type="date"
-                  className="form-control"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Events List */}
+        {/* Events */}
         <section className="py-5" id="events">
           <div className="container px-5 my-5">
             <div className="row gx-5 justify-content-center">
               <div className="col-lg-8">
                 <ul className="list-group">
-                  {filteredEvents.length > 0 ? (
-                    filteredEvents.map((evt) => (
-                      <li key={evt.id} className="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                          <h5 className="mb-1">{evt.title}</h5>
-                          <small>{new Date(evt.event_date).toLocaleString()} | {evt.city}</small>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="list-group-item">Brak wydarzeń spełniających kryteria.</li>
-                  )}
+                  {events.map((evt) => (
+                    <li key={evt.id} className="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 className="mb-1">{evt.title}</h5>
+                        <small>{new Date(evt.event_date).toLocaleString()}</small>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -159,7 +130,8 @@ function EventsList() {
       </footer>
     </div>
   );
-
 }
 
-export default EventsList;
+
+
+export default HomeUser;
