@@ -7,11 +7,15 @@ import React from 'react';
 import HomeUser from './HomeUser'
 import EventsList from './EventsList';
 
-
 function AddEvent() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [city, setCity] = useState('');
+  const [street, setStreet] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [apartmentNumber, setApartmentNumber] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
@@ -19,7 +23,16 @@ function AddEvent() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newEvent = { title, description, event_date: eventDate };
+    const newEvent = {
+      title,
+      description,
+      event_date: eventDate,
+      city,
+      street,
+      house_number: houseNumber,
+      apartment_number: apartmentNumber,
+      postal_code: postalCode
+    };
 
     fetch('http://localhost:8085/api/events/add', {
       method: 'POST',
@@ -134,6 +147,66 @@ function AddEvent() {
                     />
                   </div>
 
+                  {/* Nowe pola adresowe */}
+                  <div className="mb-3">
+                    <label htmlFor="city" className="form-label">Miasto</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="city"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="street" className="form-label">Ulica</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="street"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="houseNumber" className="form-label">Numer domu</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="houseNumber"
+                      value={houseNumber}
+                      onChange={(e) => setHouseNumber(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="apartmentNumber" className="form-label">Numer mieszkania (opcjonalnie)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="apartmentNumber"
+                      value={apartmentNumber}
+                      onChange={(e) => setApartmentNumber(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="postalCode" className="form-label">Kod pocztowy</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="postalCode"
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                      required
+                    />
+                  </div>
+
                   <button type="submit" className="btn btn-primary">Dodaj wydarzenie</button>
 
                   {success && <div className="alert alert-success mt-3">{success}</div>}
@@ -164,7 +237,6 @@ function AddEvent() {
       </footer>
     </div>
   );
-
 }
 
 export default AddEvent;
