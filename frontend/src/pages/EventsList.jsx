@@ -11,14 +11,22 @@ function EventsList() {
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:8085/api/events/sample')
-      .then(res => res.json())
+    fetch('http://localhost:8085/api/events')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
       .then(data => {
         console.log('Odebrane dane:', data);
         setEvents(data);
       })
-      .catch(() => setError('Błąd połączenia'));
-  }, []);
+      .catch((error) => {
+        console.error('Błąd fetchowania:', error);
+        setError('Błąd połączenia z serwerem');
+      });
+  }, []);  
 
   const cities = [...new Set(events?.map(evt => evt.city))];
 

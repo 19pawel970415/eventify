@@ -13,7 +13,7 @@ function HomeUser() {
   
 
   useEffect(() => {
-    fetch('http://localhost:8085/api/events/sample')
+    fetch('http://localhost:8085/api/events')
       .then(res => res.json())
       .then(data => {
         console.log('Odebrane dane:', data);
