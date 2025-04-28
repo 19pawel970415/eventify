@@ -49,61 +49,6 @@ public class EventService {
     }
 
     /**
-     * Utwórz nowe wydarzenie.
-     */
-    public EventDto createEvent(CreateEventDto dto) {
-        // Pobierz encje pomocnicze
-        City city = cityService.getCityById(dto.getCityId());
-        User organizer = userService.getUserById(dto.getOrganizerId());
-
-        // Mapowanie na encję
-        Event event = new Event();
-        event.setTitle(dto.getTitle());
-        event.setDescription(dto.getDescription());
-        event.setEventDate(dto.getEventDate());
-        event.setCity(city);
-        event.setOrganizer(organizer);
-        event.setStreet(dto.getStreet());
-        event.setBuildingNumber(dto.getBuildingNumber());
-        event.setApartmentNumber(dto.getApartmentNumber());
-        event.setPostalCode(dto.getPostalCode());
-
-        Event saved = eventRepository.save(event);
-        return mapToDto(saved);
-    }
-
-    /**
-     * Zaktualizuj istniejące wydarzenie.
-     */
-    public EventDto updateEvent(Long id, CreateEventDto dto) {
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event", "id", id));
-
-        City city = cityService.getCityById(dto.getCityId());
-        event.setTitle(dto.getTitle());
-        event.setDescription(dto.getDescription());
-        event.setEventDate(dto.getEventDate());
-        event.setCity(city);
-        event.setStreet(dto.getStreet());
-        event.setBuildingNumber(dto.getBuildingNumber());
-        event.setApartmentNumber(dto.getApartmentNumber());
-        event.setPostalCode(dto.getPostalCode());
-        // Organizer zwykle nie zmieniamy przy update
-
-        Event updated = eventRepository.save(event);
-        return mapToDto(updated);
-    }
-
-    /**
-     * Usuń wydarzenie.
-     */
-    public void deleteEvent(Long id) {
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event", "id", id));
-        eventRepository.delete(event);
-    }
-
-    /**
      * Pomocnicze mapowanie z encji na DTO.
      */
     private EventDto mapToDto(Event event) {
