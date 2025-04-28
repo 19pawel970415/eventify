@@ -10,6 +10,8 @@ import pl.eventify.backend.exception.ResourceNotFoundException;
 import pl.eventify.backend.model.User;
 import pl.eventify.backend.repository.UserRepository;
 
+import java.time.Instant;
+
 /**
  * Serwis do obsługi użytkowników: rejestracja, uwierzytelnianie i pobieranie danych.
  */
@@ -39,6 +41,7 @@ public class UserService {
         user.setName(name);
         user.setEmail(normalizedEmail);
         user.setPassword(hashed);
+        user.setCreatedAt(Instant.now());
         User saved = userRepository.save(user);
         return UserDto.from(saved);
     }

@@ -1,11 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 import React from 'react';
-import Login from './Login';
-import EventsList from './EventsList';
-
 
 function Register() {
   const [name, setName] = useState('');
@@ -14,6 +11,7 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,7 +23,7 @@ function Register() {
     return re.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
     const newErrors = {};
@@ -53,9 +51,24 @@ function Register() {
     setErrors(newErrors);
 
     if (valid) {
-      console.log('Rejestracja udana:', { name, email, password });
-      setSuccess(true);
-      // Możesz tu wysłać dane do API np. fetch('/register', ...)
+      try {
+        const response = await fetch('http://localhost:8085/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        if (!response.ok) {
+          const errorBody = await response.json();
+          setErrors({ api: errorBody.message || 'Błąd rejestracji' });
+        } else {
+          setSuccess(true);
+          // opcjonalnie zapis userDto, np. const userDto = await response.json();
+          setTimeout(() => navigate('/login'), 2000);
+        }
+      } catch (err) {
+        setErrors({ api: err.message });
+      }
     }
   };
 
@@ -80,9 +93,8 @@ function Register() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                 <Link className="nav-link" to="/">Strona główna</Link>
+                  <Link className="nav-link" to="/">Strona główna</Link>
                 </li>
- 
                 <li className="nav-item">
                   <Link className="nav-link" to="/Eventslist">Lista wydarzeń</Link>
                 </li>
@@ -90,7 +102,6 @@ function Register() {
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Konto</a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
-
                   </ul>
                 </li>
               </ul>
@@ -110,7 +121,7 @@ function Register() {
                   <div className="card-body">
                     {success ? (
                       <div className="alert alert-success" role="alert">
-                        Rejestracja zakończona sukcesem!
+                        Rejestracja zakończona sukcesem! Za chwilę nastąpi przekierowanie.
                       </div>
                     ) : (
                       <form onSubmit={handleSubmit}>
@@ -165,6 +176,12 @@ function Register() {
                           <label htmlFor="confirmPassword">Potwierdź hasło</label>
                           {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                         </div>
+
+                        {errors.api && (
+                          <div className="alert alert-danger mt-3" role="alert">
+                            {errors.api}
+                          </div>
+                        )}
 
                         <div className="d-flex align-items-center justify-content-between mt-4 mb-0">
                           <button className="btn btn-primary w-100" type="submit">Zarejestruj się</button>

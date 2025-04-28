@@ -7,7 +7,6 @@ import pl.eventify.backend.service.EventService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
