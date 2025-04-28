@@ -1,56 +1,73 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
-import React from 'react';
 
 function EventsList() {
-  const [events, setEvents] = useState(null);
-  const [error, setError] = useState('');
+  const [events, setEvents] = useState([]);
+  const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+  const [eventsError, setEventsError] = useState('');
+  const [citiesError, setCitiesError] = useState('');
+
+  const fetchWithAuth = async (url) => {
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    return response.json();
+  };
 
   useEffect(() => {
-    fetch('http://localhost:8085/api/events')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then(data => {
-        console.log('Odebrane dane:', data);
+    const fetchEvents = async () => {
+      try {
+        const data = await fetchWithAuth('http://localhost:8085/api/events');
         setEvents(data);
-      })
-      .catch((error) => {
-        console.error('Błąd fetchowania:', error);
-        setError('Błąd połączenia z serwerem');
-      });
-  }, []);  
+      } catch (error) {
+        console.error('Błąd pobierania wydarzeń:', error);
+        setEventsError('Nie udało się załadować wydarzeń.');
+      }
+    };
 
-  const cities = [...new Set(events?.map(evt => evt.city))];
+    const fetchCities = async () => {
+      try {
+        const data = await fetchWithAuth('http://localhost:8085/api/cities');
+        setCities(data);
+      } catch (error) {
+        console.error('Błąd pobierania miast:', error);
+        setCitiesError('Nie udało się załadować listy miast.');
+      }
+    };
 
-  if (error) {
-    return <h1>{error}</h1>;
-  }
-  if (!events) {
-    return <h1>Ładuję wydarzenia...</h1>;
-  }
+    fetchEvents();
+    fetchCities();
+  }, []);
 
-  // Filtrowanie eventów po mieście i dacie
   const filteredEvents = events.filter(evt => {
-    const matchesCity = selectedCity ? evt.city === selectedCity : true;
-    const matchesDate = selectedDate ? evt.event_date.startsWith(selectedDate) : true;
+    const matchesCity = selectedCity ? evt.cityName === selectedCity : true;
+    const matchesDate = selectedDate ? evt.eventDate.startsWith(selectedDate) : true;
     return matchesCity && matchesDate;
   });
+
+  if (eventsError) {
+    return <div className="alert alert-danger m-5">{eventsError}</div>;
+  }
 
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navigation */}
+        {/* Navbar */}
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container px-5">
-            <a className="navbar-brand" href="/">Eventify</a>
+            <Link className="navbar-brand" to="/">Eventify</Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -83,36 +100,41 @@ function EventsList() {
         <header className="bg-dark py-5">
           <div className="container px-5">
             <div className="row gx-5 align-items-center justify-content-center">
-              <div className="col-lg-8 col-xl-7 col-xxl-6">
-                <div className="my-5 text-center text-xl-start">
-                  <h1 className="display-5 fw-bolder text-white mb-2">Lista wydarzeń</h1>
-                  <p className="lead fw-normal text-white-50 mb-4">
-                    Wyszukuj wydarzenia według miasta i daty!
-                  </p>
-                </div>
+              <div className="col-lg-8 col-xl-7 col-xxl-6 text-center text-white">
+                <h1 className="display-5 fw-bolder">Lista wydarzeń</h1>
+                <p className="lead text-white-50">Przeglądaj wydarzenia w różnych miastach i na różne daty.</p>
               </div>
             </div>
           </div>
         </header>
 
         {/* Filters */}
-        <section className="py-3">
+        <section className="py-4">
           <div className="container px-5">
-            <div className="row justify-content-center g-3">
+            <div className="row g-3 justify-content-center">
               <div className="col-md-4">
+                <label htmlFor="citySelect" className="form-label text-white">Wybierz miasto:</label>
                 <select
+                  id="citySelect"
                   className="form-select"
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
                 >
                   <option value="">Wszystkie miasta</option>
-                  {cities.map((city, index) => (
-                    <option key={index} value={city}>{city}</option>
+                  {cities.map((city) => (
+                    <option key={city.id} value={city.name}>
+                      {city.name}
+                    </option>
                   ))}
                 </select>
+                {citiesError && (
+                  <div className="text-danger mt-2">{citiesError}</div>
+                )}
               </div>
               <div className="col-md-4">
+                <label htmlFor="dateSelect" className="form-label text-white">Wybierz datę:</label>
                 <input
+                  id="dateSelect"
                   type="date"
                   className="form-control"
                   value={selectedDate}
@@ -124,22 +146,30 @@ function EventsList() {
         </section>
 
         {/* Events List */}
-        <section className="py-5" id="events">
-          <div className="container px-5 my-5">
+        <section className="py-5">
+          <div className="container px-5">
             <div className="row gx-5 justify-content-center">
               <div className="col-lg-8">
                 <ul className="list-group">
                   {filteredEvents.length > 0 ? (
                     filteredEvents.map((evt) => (
-                      <li key={evt.id} className="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                          <h5 className="mb-1">{evt.title}</h5>
-                          <small>{new Date(evt.event_date).toLocaleString()} | {evt.city}</small>
+                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow-lg rounded">
+                        <h4 className="text-primary">{evt.title}</h4>
+                        <p className="mb-1">
+                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                          <strong>Miasto:</strong> {evt.cityName}<br />
+                          <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
+                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
+                        </p>
+                        <div className="d-flex justify-content-between">
+
                         </div>
                       </li>
                     ))
                   ) : (
-                    <li className="list-group-item">Brak wydarzeń spełniających kryteria.</li>
+                    <li className="list-group-item text-center">
+                      Brak wydarzeń spełniających kryteria.
+                    </li>
                   )}
                 </ul>
               </div>
@@ -152,22 +182,17 @@ function EventsList() {
       <footer className="bg-dark py-4 mt-auto">
         <div className="container px-5">
           <div className="row align-items-center justify-content-between flex-column flex-sm-row">
-            <div className="col-auto">
-              <div className="small m-0 text-white">&copy; Twoja Strona 2025</div>
+            <div className="col-auto text-white">
+              &copy; Eventify 2025
             </div>
             <div className="col-auto">
-              <a className="link-light small" href="#!">Privacy</a>
-              <span className="text-white mx-1">&middot;</span>
-              <a className="link-light small" href="#!">Terms</a>
-              <span className="text-white mx-1">&middot;</span>
-              <a className="link-light small" href="#!">Contact</a>
+             
             </div>
           </div>
         </div>
       </footer>
     </div>
   );
-
 }
 
 export default EventsList;

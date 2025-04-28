@@ -13,11 +13,26 @@ import AddEvent from './pages/AddEvent';
 function Home({ events, error }) {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [filteredEvents, setFilteredEvents] = useState([]);
 
   useEffect(() => {
     // Sprawdzamy czy mamy token w localStorage
     setIsAuthenticated(Boolean(localStorage.getItem('token')));
-  }, []);
+
+    // Filtrujemy wydarzenia na najbliższy tydzień
+    if (events) {
+      const today = new Date();
+      const nextWeek = new Date(today);
+      nextWeek.setDate(today.getDate() + 7);
+
+      const filtered = events.filter(event => {
+        const eventDate = new Date(event.eventDate);
+        return eventDate >= today && eventDate <= nextWeek;
+      });
+
+      setFilteredEvents(filtered);
+    }
+  }, [events]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -52,7 +67,6 @@ function Home({ events, error }) {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-
                 {isAuthenticated ? (
                   <>
                     <li className="nav-item">
@@ -106,7 +120,6 @@ function Home({ events, error }) {
                     </li>
                   </>
                 )}
-
               </ul>
             </div>
           </div>
@@ -120,48 +133,54 @@ function Home({ events, error }) {
                 <div className="my-5 text-center text-xl-start">
                   <h1 className="display-5 fw-bolder text-white mb-2">Witaj w Eventify!</h1>
                   <p className="lead fw-normal text-white-50 mb-4">
-                    Tu znajdziesz każde wydarzenie.
+                    Największe wydarzenia kulturowe w cełej Polsce. Kupowanie bilató, możliowść dodawanie wydarzenia do listy ulubionych i wiele więcej. Zarejestruj się aby rozpocząć!
                   </p>
-                </div>
+                 </div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Events */}
-        <section className="py-5" id="events">
-          <div className="container px-5 my-5">
+        {/* Events List */}
+        <section className="py-5">
+          <div className="container px-5">
             <div className="row gx-5 justify-content-center">
               <div className="col-lg-8">
                 <ul className="list-group">
-                  {events.map((evt) => (
-                    <li key={evt.id} className="list-group-item d-flex justify-content-between align-items-center">
-                      <div>
-                        <h5 className="mb-1">{evt.title}</h5>
-                        <small>{new Date(evt.eventDate).toLocaleString()}</small>
-                      </div>
+                  {filteredEvents.length > 0 ? (
+                    filteredEvents.map((evt) => (
+                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow-lg rounded">
+                        <h4 className="text-primary">{evt.title}</h4>
+                        <p className="mb-1">
+                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                          <strong>Miasto:</strong> {evt.cityName}<br />
+                          <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
+                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
+                        </p>
+                        <div className="d-flex justify-content-between">
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="list-group-item text-center">
+                      Brak wydarzeń spełniających kryteria.
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
           </div>
         </section>
       </main>
-
       {/* Footer */}
       <footer className="bg-dark py-4 mt-auto">
         <div className="container px-5">
           <div className="row align-items-center justify-content-between flex-column flex-sm-row">
-            <div className="col-auto">
-              <div className="small m-0 text-white">&copy; Twoja Strona 2025</div>
+            <div className="col-auto text-white">
+              &copy; Eventify 2025
             </div>
             <div className="col-auto">
-              <a className="link-light small" href="#!">Privacy</a>
-              <span className="text-white mx-1">&middot;</span>
-              <a className="link-light small" href="#!">Terms</a>
-              <span className="text-white mx-1">&middot;</span>
-              <a className="link-light small" href="#!">Contact</a>
+
             </div>
           </div>
         </div>
