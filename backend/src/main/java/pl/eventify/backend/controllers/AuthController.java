@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,8 +61,13 @@ public class AuthController {
             );
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             String token = jwtService.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(new JwtResponse(token));
-        } catch (Exception ex) {
+
+            // pobieramy dane użytkownika z serwisu
+            UserDto userDto = userService.findByEmail(email);
+
+            // zwracamy token + dane użytkownika
+            return ResponseEntity.ok(new JwtResponse(token, userDto.getId(), userDto.getName()));
+        } catch (AuthenticationException ex) {
             throw new BadCredentialsException();
         }
     }

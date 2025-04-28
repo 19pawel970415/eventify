@@ -3,6 +3,7 @@ package pl.eventify.backend.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -10,11 +11,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    // Klucz do podpisywania tokenów (w prawdziwym projekcie trzymalibyśmy go w zmiennych środowiskowych!)
-    private static final String SECRET_KEY = "eventify_secret_key_123";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    // Czas ważności tokena (np. 24 godziny)
-    private static final long EXPIRATION_TIME_MS = 1000 * 60 * 60 * 24;
+    @Value("${jwt.expiration-ms}")
+    private long expirationTimeMs;
 
     /**
      * Generuje token JWT dla danego e-maila.
@@ -23,8 +24,8 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MS))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeMs))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
@@ -52,7 +53,7 @@ public class JwtService {
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }

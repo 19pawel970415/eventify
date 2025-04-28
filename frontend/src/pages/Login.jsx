@@ -5,16 +5,15 @@ import '../css/styles.css';
 import React from 'react';
 import Register from './Register';
 import EventsList from './EventsList';
-import HomeUser from './HomeUser'
-
+import HomeUser from './HomeUser';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+  const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
-
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,7 +25,7 @@ function Login() {
     return re.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
     const newErrors = {};
@@ -41,15 +40,37 @@ function Login() {
     }
 
     setErrors(newErrors);
+    setServerError('');
 
     if (valid) {
-      console.log('Logowanie udane:', { email, password });
-      setSuccess(true);
-      // Tutaj możesz dodać logikę logowania np. fetch do API
-       // Przekierowanie do HomeUser po udanym logowaniu
-       setTimeout(() => {
-        navigate('/HomeUser'); 
-      }, 1000); 
+      try {
+        const response = await fetch('http://localhost:8085/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Nieprawidłowe dane logowania');
+        }
+
+        const data = await response.json();
+        console.log('Otrzymany token:', data.token);
+
+        localStorage.setItem('token', data.token);
+
+        setSuccess(true);
+
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+
+      } catch (error) {
+        console.error('Błąd logowania:', error);
+        setServerError(error.message || 'Wystąpił błąd logowania');
+      }
     }
   };
 
@@ -75,8 +96,8 @@ function Login() {
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <Link className="nav-link" to="/">Strona główna</Link>
-                </li>
 
+                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
                 </li>
@@ -107,6 +128,11 @@ function Login() {
                       </div>
                     ) : (
                       <form onSubmit={handleSubmit}>
+                        {serverError && (
+                          <div className="alert alert-danger" role="alert">
+                            {serverError}
+                          </div>
+                        )}
                         <div className="form-floating mb-3">
                           <input
                             className={`form-control ${errors.email ? 'is-invalid' : ''}`}
@@ -170,34 +196,6 @@ function Login() {
       </footer>
     </div>
   );
-
-  function App() {
-    const [events, setEvents] = useState(null);
-    const [error, setError] = useState('');
-  
-    useEffect(() => {
-      fetch('http://localhost:8085/api/events/sample')
-        .then(res => res.json())
-        .then(data => {
-          console.log('Odebrane dane:', data);
-          setEvents(data);
-        })
-        .catch(() => setError('Błąd połączenia'));
-    }, []);
-  
-    return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home events={events} error={error} />} />
-
-          <Route path="/EventsList" element={<EventsList />} />
-  
-          <Route path="/Register" element={<Register />} />
-          <Route path="/HomeUser" element={<HomeUser />} />
-        </Routes>
-      </Router>
-    );
-}
 }
 
 export default Login;

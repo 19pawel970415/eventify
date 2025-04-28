@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import React from 'react';
@@ -10,8 +10,21 @@ import EventsList from './pages/EventsList';
 import HomeUser from './pages/HomeUser';
 import AddEvent from './pages/AddEvent';
 
-
 function Home({ events, error }) {
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Sprawdzamy czy mamy token w localStorage
+    setIsAuthenticated(Boolean(localStorage.getItem('token')));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/', { replace: true });
+  };
+
   if (error) {
     return <h1>{error}</h1>;
   }
@@ -25,7 +38,7 @@ function Home({ events, error }) {
         {/* Navigation */}
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container px-5">
-            <a className="navbar-brand" href="/">Eventify</a>
+            <Link className="navbar-brand" to="/">Eventify</Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -40,17 +53,60 @@ function Home({ events, error }) {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
-                <li className="nav-item">
-                  <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
-                </li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Konto</a>
-                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                    <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
-                    <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
+                {isAuthenticated ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/">Home</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/AddEvent">Dodaj wydarzenie</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/MyEvents">Moje wydarzenia</Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <button
+                        className="nav-link dropdown-toggle btn btn-link"
+                        id="navbarDropdownPortfolio"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Konto
+                      </button>
+                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                        <li>
+                          <button className="dropdown-item" onClick={handleLogout}>
+                            Wyloguj się
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <button
+                        className="nav-link dropdown-toggle btn btn-link"
+                        id="navbarDropdownPortfolio"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Konto
+                      </button>
+                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                        <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
+                        <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
+                      </ul>
+                    </li>
+                  </>
+                )}
 
-                  </ul>
-                </li>
               </ul>
             </div>
           </div>
@@ -122,26 +178,20 @@ function App() {
     fetch('http://localhost:8085/api/events')
       .then(res => res.json())
       .then(data => {
-        console.log('Odebrane dane:', data);
         setEvents(data);
       })
       .catch(() => setError('Błąd połączenia'));
-  }, []);  
+  }, []);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home events={events} error={error} />} />
         <Route path="/Register" element={<Register />} />
-
         <Route path="/Login" element={<Login />} />
-
         <Route path="/HomeUser" element={<HomeUser />} />
-
         <Route path="/EventsList" element={<EventsList />} />
-
         <Route path="/AddEvent" element={<AddEvent />} />
-
       </Routes>
     </Router>
   );

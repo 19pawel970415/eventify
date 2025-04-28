@@ -74,7 +74,7 @@ public class UserService {
      * Pobranie użytkownika po emailu jako UserDto. Normalizacja email i sprawdzenie.
      */
     @Transactional(readOnly = true)
-    public UserDto getUserByEmail(String email) {
+    public UserDto findByEmail(String email) {
         String normalizedEmail = email.trim().toLowerCase();
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", normalizedEmail));
