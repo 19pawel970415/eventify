@@ -70,7 +70,7 @@ function Home({ events, error }) {
                 {isAuthenticated ? (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/">Home</Link>
+                      <Link className="nav-link" to="/">Strona główna</Link>
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/AddEvent">Dodaj wydarzenie</Link>

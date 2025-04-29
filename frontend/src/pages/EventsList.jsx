@@ -109,7 +109,7 @@ function EventsList() {
         </header>
 
         {/* Filters */}
-        <section className="py-4">
+                <section className="py-4">
           <div className="container px-5">
             <div className="row g-3 justify-content-center">
               <div className="col-md-4">
@@ -162,7 +162,6 @@ function EventsList() {
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
                         </p>
                         <div className="d-flex justify-content-between">
-
                         </div>
                       </li>
                     ))
