@@ -161,7 +161,19 @@ function EventsList() {
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
                         </p>
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-between align-items-center mt-3">
+                          <Link to="/Ticket" className="btn btn-success">
+                            Kup bilet
+                          </Link>
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={() => {
+                              // Dodanie do ulubionych – funkcjonalność do dodania później
+                            }}
+                            title="Dodaj do ulubionych"
+                          >
+                            ♡
+                          </button>
                         </div>
                       </li>
                     ))

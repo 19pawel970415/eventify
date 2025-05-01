@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import EventsList from './pages/EventsList';
 import HomeUser from './pages/HomeUser';
 import AddEvent from './pages/AddEvent';
+import Ticket from './pages/Ticket'
 
 function Home({ events, error }) {
   const navigate = useNavigate();
@@ -70,9 +71,9 @@ function Home({ events, error }) {
                 {isAuthenticated ? (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/">Strona główna</Link>
+                      {/*<Link className="nav-link" to="/">Strona główna</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item"> */}
                       <Link className="nav-link" to="/AddEvent">Dodaj wydarzenie</Link>
                     </li>
                     <li className="nav-item">
@@ -211,6 +212,7 @@ function App() {
         <Route path="/HomeUser" element={<HomeUser />} />
         <Route path="/EventsList" element={<EventsList />} />
         <Route path="/AddEvent" element={<AddEvent />} />
+        <Route path="/Ticket" element={<Ticket />} /> 
       </Routes>
     </Router>
   );
