@@ -237,8 +237,27 @@ function EventsList() {
                           {isAuthenticated ? (
                             <button
                               className="btn btn-outline-danger"
-                              onClick={() => {
-                                // Dodanie do ulubionych – funkcjonalność do dodania później
+                              onClick={async () => {
+                                const token = localStorage.getItem('token');
+                                try {
+                                  const response = await fetch(`http://localhost:8085/api/events/${evt.id}/like`, {
+                                    method: 'POST',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                      'Authorization': `Bearer ${token}`,
+                                    },
+                                  });
+
+                                  if (response.ok) {
+                                    alert('Dodano do ulubionych!');
+                                    navigate('/MyEvents');
+                                  } else {
+                                    throw new Error('Błąd dodawania do ulubionych');
+                                  }
+                                } catch (error) {
+                                  console.error('Błąd:', error);
+                                  alert('To wydarzenie jest już na liście Twoich polubień 😊');
+                                }
                               }}
                               title="Dodaj do ulubionych"
                             >

@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import EventsList from './pages/EventsList';
 import HomeUser from './pages/HomeUser';
-import AddEvent from './pages/AddEvent';
+import MyEvents   from './pages/MyEvents';
 import Ticket from './pages/Ticket'
 
 function Home({ events, error }) {
@@ -214,7 +214,7 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/HomeUser" element={<HomeUser />} />
         <Route path="/EventsList" element={<EventsList />} />
-        <Route path="/AddEvent" element={<AddEvent />} />
+        <Route path="/MyEvents"     element={<MyEvents />} /> 
         <Route path="/Ticket" element={<Ticket />} />
       </Routes>
     </Router>

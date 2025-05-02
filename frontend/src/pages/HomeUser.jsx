@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';  // <-- dodane useNavigate
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 import React from 'react';
-import AddEvent from './AddEvent';
+import MyEvents from './MyEvents';
 import EventsList from './EventsList';
 
 function HomeUser() {
   const [events, setEvents] = useState(null);
   const [error, setError] = useState('');
-  
+
 
   useEffect(() => {
     fetch('http://localhost:8085/api/events')
