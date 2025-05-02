@@ -71,16 +71,16 @@ function Home({ events, error }) {
                 {isAuthenticated ? (
                   <>
                     <li className="nav-item">
-                      {/*<Link className="nav-link" to="/">Strona główna</Link>
-                    </li>
-                    <li className="nav-item"> */}
-                      <Link className="nav-link" to="/AddEvent">Dodaj wydarzenie</Link>
+                      <Link className="nav-link" to="/">Strona główna</Link>
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/MyEvents">Moje wydarzenia</Link>
+                      <Link className="nav-link" to="/MyTickets">Moje bilety</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link>
                     </li>
                     <li className="nav-item dropdown">
                       <button
@@ -102,6 +102,9 @@ function Home({ events, error }) {
                   </>
                 ) : (
                   <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/">Strona główna</Link>
+                    </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
                     </li>
@@ -136,7 +139,7 @@ function Home({ events, error }) {
                   <p className="lead fw-normal text-white-50 mb-4">
                     Największe wydarzenia kulturowe w cełej Polsce. Kupowanie bilató, możliowść dodawanie wydarzenia do listy ulubionych i wiele więcej. Zarejestruj się aby rozpocząć!
                   </p>
-                 </div>
+                </div>
               </div>
             </div>
           </div>
@@ -212,7 +215,7 @@ function App() {
         <Route path="/HomeUser" element={<HomeUser />} />
         <Route path="/EventsList" element={<EventsList />} />
         <Route path="/AddEvent" element={<AddEvent />} />
-        <Route path="/Ticket" element={<Ticket />} /> 
+        <Route path="/Ticket" element={<Ticket />} />
       </Routes>
     </Router>
   );

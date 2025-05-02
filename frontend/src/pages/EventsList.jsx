@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 
@@ -10,6 +10,20 @@ function EventsList() {
   const [selectedDate, setSelectedDate] = useState('');
   const [eventsError, setEventsError] = useState('');
   const [citiesError, setCitiesError] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/');
+  };
 
   const fetchWithAuth = async (url) => {
     const token = localStorage.getItem('token');
@@ -81,16 +95,62 @@ function EventsList() {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">Strona główna</Link>
-                </li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Konto</a>
-                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                    <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
-                    <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
-                  </ul>
-                </li>
+                {isAuthenticated ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/">Strona główna</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/MyTickets">Moje bilety</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <button
+                        className="nav-link dropdown-toggle btn btn-link"
+                        id="navbarDropdownPortfolio"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Konto
+                      </button>
+                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                        <li>
+                          <button className="dropdown-item" onClick={handleLogout}>
+                            Wyloguj się
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/">Strona główna</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <button
+                        className="nav-link dropdown-toggle btn btn-link"
+                        id="navbarDropdownPortfolio"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Konto
+                      </button>
+                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                        <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
+                        <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
+                      </ul>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -109,7 +169,7 @@ function EventsList() {
         </header>
 
         {/* Filters */}
-                <section className="py-4">
+        <section className="py-4">
           <div className="container px-5">
             <div className="row g-3 justify-content-center">
               <div className="col-md-4">
@@ -162,18 +222,37 @@ function EventsList() {
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-3">
-                          <Link to="/Ticket" className="btn btn-success">
-                            Kup bilet
-                          </Link>
-                          <button
-                            className="btn btn-outline-danger"
-                            onClick={() => {
-                              // Dodanie do ulubionych – funkcjonalność do dodania później
-                            }}
-                            title="Dodaj do ulubionych"
-                          >
-                            ♡
-                          </button>
+                          {isAuthenticated ? (
+                            <Link to="/Ticket" className="btn btn-success">
+                              Kup bilet
+                            </Link>
+                          ) : (
+                            <button
+                              className="btn btn-success"
+                              onClick={() => alert("Zaloguj się by kupić bilet!")}
+                            >
+                              Kup bilet
+                            </button>
+                          )}
+                          {isAuthenticated ? (
+                            <button
+                              className="btn btn-outline-danger"
+                              onClick={() => {
+                                // Dodanie do ulubionych – funkcjonalność do dodania później
+                              }}
+                              title="Dodaj do ulubionych"
+                            >
+                              ♡
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-outline-danger"
+                              onClick={() => alert("Zaloguj się by dodać wydarzenie do ulubionych!")}
+                              title="Dodaj do ulubionych"
+                            >
+                              ♡
+                            </button>
+                          )}
                         </div>
                       </li>
                     ))
@@ -197,7 +276,7 @@ function EventsList() {
               &copy; Eventify 2025
             </div>
             <div className="col-auto">
-             
+
             </div>
           </div>
         </div>
