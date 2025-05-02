@@ -54,4 +54,14 @@ public class LikedEventService {
     public List<LikedEvent> getLikedEventsForUser(Long userId) {
         return likedRepo.findAllByUserId(userId);
     }
+
+    @Transactional
+    public void unlikeEvent(Long userId, Long eventId) {
+        LikedEventId key = new LikedEventId(userId, eventId);
+        if (!likedRepo.existsById(key)) {
+            throw new ResourceNotFoundException("Like", "userId,eventId", key);
+        }
+        likedRepo.deleteById(key);
+    }
+
 }

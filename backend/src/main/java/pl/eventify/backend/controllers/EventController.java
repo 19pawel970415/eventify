@@ -66,4 +66,15 @@ public class EventController {
 
         return ResponseEntity.ok(liked);
     }
+
+    @DeleteMapping("/{id}/liked")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> unlikeEvent(@PathVariable("id") Long eventId,
+                                            Authentication auth) {
+        String email = auth.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User","email",email));
+        likedEventService.unlikeEvent(user.getId(), eventId);
+        return ResponseEntity.noContent().build();
+    }
 }

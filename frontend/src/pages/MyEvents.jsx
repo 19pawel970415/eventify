@@ -109,11 +109,28 @@ function MyEvents() {
                           </Link>
                           <button
                             className="btn btn-outline-dark"
-                            onClick={() => console.log('Usuń z ulubionych')}
+                            onClick={async () => {
+                              const token = localStorage.getItem('token');
+                              try {
+                                const res = await fetch(`http://localhost:8085/api/events/${evt.id}/liked`, {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`,
+                                  },
+                                });
+                                if (res.status === 204) {
+                                  alert('Wydarzenie zostało usunięte z listy ulubionych!');
+                                  setEvents(prev => prev.filter(e => e.id !== evt.id));
+                                } else {
+                                  throw new Error('Błąd usuwania z ulubionych');
+                                }
+                              } catch (err) {
+                                console.error(err);
+                                alert('Nie udało się usunąć wydarzenia z ulubionych');
+                              }
+                            }}
                             title="Usuń z ulubionych"
-                            style={{ transition: 'background-color 0.2s' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#000'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
                           >
                             🗑
                           </button>
