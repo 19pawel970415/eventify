@@ -16,9 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Globalny handler wyjątków dla aplikacji Eventify.
- */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -59,6 +56,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(AlreadyLikedException.class)
+    public ResponseEntity<Object> handleAlreadyLiked(
+            AlreadyLikedException ex,
+            HttpServletRequest request
+    ) {
+        Map<String, Object> body = createBody(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 
     @Override

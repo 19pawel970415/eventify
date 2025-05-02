@@ -1,8 +1,5 @@
 package pl.eventify.backend.exception;
 
-/**
- * Wyjątek zgłaszany, gdy nie odnaleziono zasobu o podanym identyfikatorze.
- */
 public class ResourceNotFoundException extends RuntimeException {
 
     private String resourceName;

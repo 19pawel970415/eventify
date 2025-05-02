@@ -1,8 +1,5 @@
 package pl.eventify.backend.exception;
 
-/**
- * Wyjątek zgłaszany, gdy próbuje się utworzyć zasób o unikalnej wartości, która już istnieje.
- */
 public class ResourceAlreadyExistsException extends RuntimeException {
     private final String resourceName;
     private final String fieldName;
