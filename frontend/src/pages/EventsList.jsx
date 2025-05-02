@@ -20,6 +20,7 @@ function EventsList() {
   }, []);
 
   const handleLogout = () => {
+    alert('Nastąpiło wylogowanie z konta.');
     localStorage.removeItem('token');
     setIsAuthenticated(false);
     navigate('/');

@@ -36,6 +36,7 @@ function Home({ events, error }) {
   }, [events]);
 
   const handleLogout = () => {
+    alert('Nastąpiło wylogowanie z konta.');
     localStorage.removeItem('token');
     setIsAuthenticated(false);
     navigate('/', { replace: true });
