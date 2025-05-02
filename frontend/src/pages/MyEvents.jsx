@@ -22,6 +22,13 @@ function MyEvents() {
     }
   }, [navigate]);
 
+  // Funkcja obsługi wylogowania
+  const handleLogout = () => {
+    alert('Nastąpiło wylogowanie z konta.');
+    localStorage.removeItem('token');
+    navigate('/', { replace: true });
+  };
+
   // Pobranie ulubionych wydarzeń
   useEffect(() => {
     const fetchWithAuth = async (url) => {
@@ -93,14 +100,7 @@ function MyEvents() {
                   </button>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
                     <li>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => {
-                          alert('Nastąpiło wylogowanie z konta.');
-                          localStorage.removeItem('token');
-                          navigate('/', { replace: true });
-                        }}
-                      >
+                      <button className="dropdown-item" onClick={handleLogout}>
                         Wyloguj się
                       </button>
                     </li>
@@ -136,10 +136,8 @@ function MyEvents() {
                       <li key={evt.id} className="list-group-item p-4 mb-3 shadow-lg rounded">
                         <h4 className="text-primary">{evt.title}</h4>
                         <p className="mb-1">
-                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}
-                          <br />
-                          <strong>Miasto:</strong> {evt.cityName}
-                          <br />
+                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                          <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
                         </p>
