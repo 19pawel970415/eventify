@@ -1,4 +1,3 @@
-// pl/eventify/backend/service/CustomUserDetailsService.java
 package pl.eventify.backend.service;
 
 import pl.eventify.backend.model.User;

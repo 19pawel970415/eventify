@@ -17,9 +17,6 @@ public class JwtService {
     @Value("${jwt.expiration-ms}")
     private long expirationTimeMs;
 
-    /**
-     * Generuje token JWT dla danego e-maila.
-     */
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -29,16 +26,10 @@ public class JwtService {
                 .compact();
     }
 
-    /**
-     * Pobiera e-mail (subject) z tokena.
-     */
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    /**
-     * Sprawdza, czy token jest poprawny (ważny i nieprzeterminowany).
-     */
     public boolean validateToken(String token) {
         try {
             Claims claims = extractAllClaims(token);
@@ -48,9 +39,6 @@ public class JwtService {
         }
     }
 
-    /**
-     * Pomocnicza metoda do wydobycia pełnych claimów z tokena.
-     */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)

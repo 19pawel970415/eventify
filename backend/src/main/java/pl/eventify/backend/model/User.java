@@ -62,21 +62,11 @@ public class User {
         return createdAt;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-
-
     }
 }

@@ -2,9 +2,6 @@ package pl.eventify.backend.dto;
 
 import java.time.Instant;
 
-/**
- * DTO do zwracania danych użytkownika (bez hasła).
- */
 public class UserDto {
 
     private Long id;
@@ -21,7 +18,6 @@ public class UserDto {
         this.createdAt = createdAt;
     }
 
-    // konwerter z encji
     public static UserDto from(pl.eventify.backend.model.User u) {
         return new UserDto(
                 u.getId(),
@@ -31,10 +27,10 @@ public class UserDto {
         );
     }
 
-    // --- gettery / settery ---
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -42,6 +38,7 @@ public class UserDto {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -49,14 +46,8 @@ public class UserDto {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 }
