@@ -66,6 +66,7 @@ public class EventService {
                 .buildingNumber(event.getBuildingNumber())
                 .apartmentNumber(event.getApartmentNumber())
                 .postalCode(event.getPostalCode())
+                .price(event.getPrice())
                 .build();
     }
 }

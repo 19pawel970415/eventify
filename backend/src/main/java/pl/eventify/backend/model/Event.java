@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,6 +42,10 @@ public class Event {
     @NotBlank
     @Column(name = "street", nullable = false)
     private String street;
+
+    @NotNull
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private Float price;
 
     @NotBlank
     @Column(name = "building_number", nullable = false)
@@ -103,6 +110,14 @@ public class Event {
 
     public String getStreet() {
         return street;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
     public void setStreet(String street) {
         this.street = street;

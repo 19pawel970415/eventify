@@ -1,5 +1,6 @@
 package pl.eventify.backend.dto;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 public class EventDto {
@@ -17,6 +18,7 @@ public class EventDto {
     private String buildingNumber;
     private String apartmentNumber;
     private String postalCode;
+    private Float price;
 
     private EventDto(Builder builder) {
         this.id = builder.id;
@@ -32,6 +34,7 @@ public class EventDto {
         this.buildingNumber = builder.buildingNumber;
         this.apartmentNumber = builder.apartmentNumber;
         this.postalCode = builder.postalCode;
+        this.price = builder.price;
     }
 
     public static Builder builder() {
@@ -52,6 +55,7 @@ public class EventDto {
         private String buildingNumber;
         private String apartmentNumber;
         private String postalCode;
+        private Float price;
 
         public Builder id(Long id) {
             this.id = id;
@@ -105,6 +109,11 @@ public class EventDto {
             this.postalCode = postalCode;
             return this;
         }
+        public Builder price (Float price) {
+            this.price = price;
+            return this;
+        }
+
         public EventDto build() {
             return new EventDto(this);
         }
@@ -149,5 +158,9 @@ public class EventDto {
     }
     public String getPostalCode() {
         return postalCode;
+    }
+
+    public Float getPrice() {
+        return price;
     }
 }

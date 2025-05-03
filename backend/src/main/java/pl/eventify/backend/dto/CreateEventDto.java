@@ -3,6 +3,8 @@ package pl.eventify.backend.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 public class CreateEventDto {
@@ -32,6 +34,9 @@ public class CreateEventDto {
 
     @NotBlank
     private String postalCode;
+
+    @NotBlank
+    private DecimalFormat price;
 
     // --- getters & setters ---
 
@@ -96,5 +101,11 @@ public class CreateEventDto {
     }
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+    public DecimalFormat getPrice() {
+        return price;
+    }
+    public void setPrice(DecimalFormat price) {
+        this.price = price;
     }
 }
