@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -45,7 +46,7 @@ public class Event {
 
     @NotNull
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    private Float price;
+    private BigDecimal price;
 
     @NotBlank
     @Column(name = "building_number", nullable = false)
@@ -112,11 +113,11 @@ public class Event {
         return street;
     }
 
-    public Float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
     public void setStreet(String street) {
