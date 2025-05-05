@@ -68,8 +68,8 @@ function MyTickets() {
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item"><Link className="nav-link" to="/">Strona główna</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/EventsList">Lista wydarzeń</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/MyTickets">Moje bilety</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link></li>
                 <li className="nav-item dropdown">
                   <button className="nav-link dropdown-toggle btn btn-link" id="userDropdown" data-bs-toggle="dropdown">
                     Konto
@@ -104,27 +104,27 @@ function MyTickets() {
                   <div className="alert alert-info text-center">Brak zakupionych biletów.</div>
                 ) : (
                   <ul className="list-group">
-                   {error ? (
-  <div className="alert alert-danger">{error}</div>
-) : tickets.length === 0 ? (
-  <div className="alert alert-info text-center">Brak zakupionych biletów.</div>
-) : (
-  <ul className="list-group">
-    {tickets.map(ticket => (
-      <li key={ticket.id} className="list-group-item p-4 mb-3 shadow rounded">
-        <h4 className="text-primary">{ticket.title}</h4>
-        <p className="mb-2">
-          <strong>Data:</strong> {new Date(ticket.eventDate).toLocaleString()}<br />
-          <strong>Miasto:</strong> {ticket.cityName}<br />
-          <strong>Adres:</strong> {ticket.street} {ticket.buildingNumber}
-          {ticket.apartmentNumber ? `/${ticket.apartmentNumber}` : ''}<br />
-          <strong>Liczba biletów:</strong> {ticket.amount}<br />
-          <strong>Łączna cena:</strong> {ticket.priceAll.toFixed(2)} zł
-        </p>
-      </li>
-    ))}
-  </ul>
-)}
+                    {error ? (
+                      <div className="alert alert-danger">{error}</div>
+                    ) : tickets.length === 0 ? (
+                      <div className="alert alert-info text-center">Brak zakupionych biletów.</div>
+                    ) : (
+                      <ul className="list-group">
+                        {tickets.map(ticket => (
+                          <li key={ticket.id} className="list-group-item p-4 mb-3 shadow rounded">
+                            <h4 className="text-primary">{ticket.title}</h4>
+                            <p className="mb-2">
+                              <strong>Data:</strong> {new Date(ticket.eventDate).toLocaleString()}<br />
+                              <strong>Miasto:</strong> {ticket.cityName}<br />
+                              <strong>Adres:</strong> {ticket.street} {ticket.buildingNumber}
+                              {ticket.apartmentNumber ? `/${ticket.apartmentNumber}` : ''}<br />
+                              <strong>Liczba biletów:</strong> {ticket.amount}<br />
+                              <strong>Łączna cena:</strong> {ticket.priceAll.toFixed(2)} zł
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
 
                   </ul>
                 )}

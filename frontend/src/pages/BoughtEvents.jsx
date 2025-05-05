@@ -56,7 +56,7 @@ function BoughtEvents() {
       alert('Musisz być zalogowany, aby kupić bilet.');
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:8085/api/events/${event.id}/buy`, {
         method: 'POST',
@@ -71,7 +71,7 @@ function BoughtEvents() {
           priceAll: finalPrice
         })
       });
-  
+
       if (response.ok) {
         alert(`Zakupiono ${ticketCount} bilet(y) na wydarzenie "${title}" za ${finalPrice.toFixed(2)} zł.`);
         navigate('/MyTickets');
@@ -84,7 +84,7 @@ function BoughtEvents() {
       alert('Nie udało się połączyć z serwerem.');
     }
   };
-  
+
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -155,7 +155,7 @@ function BoughtEvents() {
         <section className="py-5">
           <div className="container">
             <div className="card shadow-lg p-4">
-              
+
               <h3><strong></strong> {title}</h3>
               <p><strong>Data:</strong> {new Date(eventDate).toLocaleString()}</p>
               <p><strong>Miasto:</strong> {cityName}</p>
@@ -172,8 +172,8 @@ function BoughtEvents() {
               <h4 className="text-success mt-3">Cena końcowa: {finalPrice.toFixed(2)} zł</h4>
 
               <button className="btn btn-success" onClick={handlePurchase}>
-  Potwierdź zakup
-</button>
+                Potwierdź zakup
+              </button>
             </div>
           </div>
         </section>
