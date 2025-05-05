@@ -139,7 +139,8 @@ function MyEvents() {
                           <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
                           <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
-                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
+                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
+                          <strong>Cena:</strong> {evt.price} 
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-3">
                           <Link to="/Ticket" className="btn btn-success">

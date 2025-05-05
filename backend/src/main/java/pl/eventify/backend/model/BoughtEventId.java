@@ -1,13 +1,10 @@
-
 package pl.eventify.backend.model;
 
-import java.io.Serializable;
-import java.util.Objects;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 
-@Embeddable
-public class LikedEventId implements Serializable {
+import java.util.Objects;
+
+public class BoughtEventId {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "user_id")
@@ -16,9 +13,9 @@ public class LikedEventId implements Serializable {
     @Column(name = "event_id")
     private Long eventId;
 
-    public LikedEventId() {}
+    //public LikedEventId() {}
 
-    public LikedEventId(Long userId, Long eventId) {
+    public BoughtEventId(Long userId, Long eventId) {
         this.userId = userId;
         this.eventId = eventId;
     }
@@ -39,8 +36,8 @@ public class LikedEventId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LikedEventId)) return false;
-        LikedEventId that = (LikedEventId) o;
+        if (!(o instanceof BoughtEventId )) return false;
+        BoughtEventId that = (BoughtEventId) o;
         return Objects.equals(userId, that.userId) &&
                 Objects.equals(eventId, that.eventId);
     }

@@ -225,9 +225,12 @@ function EventsList() {
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-3">
                           {isAuthenticated ? (
-                            <Link to="/Ticket" className="btn btn-success">
-                              Kup bilet
-                            </Link>
+                            <button
+                            className="btn btn-success"
+                            onClick={() => navigate('/BoughtEvents', { state: { event: evt } })}
+                          >
+                            Kup bilet
+                          </button>
                           ) : (
                             <button
                               className="btn btn-success"

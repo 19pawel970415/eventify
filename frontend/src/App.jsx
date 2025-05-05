@@ -8,7 +8,8 @@ import Login from './pages/Login';
 import EventsList from './pages/EventsList';
 import HomeUser from './pages/HomeUser';
 import MyEvents from './pages/MyEvents';
-import Ticket from './pages/Ticket';
+import BoughtEvents from './pages/BoughtEvents';
+import MyTickets from './pages/MyTickets'
 
 function Home() {
   const navigate = useNavigate();
@@ -128,7 +129,8 @@ function Home() {
                           <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
                           <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
-                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}
+                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
+                          <strong>Cena:</strong> {evt.price} 
                         </p>
                       </li>
                     ))
@@ -166,7 +168,8 @@ function App() {
         <Route path="/HomeUser" element={<HomeUser />} />
         <Route path="/EventsList" element={<EventsList />} />
         <Route path="/MyEvents" element={<MyEvents />} />
-        <Route path="/Ticket" element={<Ticket />} />
+        <Route path="/BoughtEvents" element={<BoughtEvents/>} />
+        <Route path="/MyTickets" element={<MyTickets/>} />
       </Routes>
     </Router>
   );

@@ -75,8 +75,8 @@ function Ticket() {
                   <h3 className="mb-3">{event.title}</h3>
                   <p><strong>Data:</strong> {new Date(event.eventDate).toLocaleString()}</p>
                   <p><strong>Miasto:</strong> {event.cityName}</p>
-                  <p><strong>Adres:</strong> {event.street} {event.buildingNumber}{event.apartmentNumber ? `/${event.apartmentNumber}` : ''}</p>
-
+                  <p><strong>Adresss:</strong> {event.street} {event.buildingNumber}{event.apartmentNumber ? `/${event.apartmentNumber}` : ''}</p>
+                  <p><strong>Cena:</strong> {event.price}</p>
                   <hr />
 
                   <div className="d-flex align-items-center mb-3">
