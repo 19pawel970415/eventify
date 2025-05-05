@@ -33,8 +33,10 @@ function MyEvents() {
   useEffect(() => {
     const fetchWithAuth = async (url) => {
       const token = localStorage.getItem('token');
-      const headers = { 'Content-Type': 'application/json' };
-      headers['Authorization'] = `Bearer ${token}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
       const response = await fetch(url, { headers });
       if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
       return response.json();
@@ -57,6 +59,15 @@ function MyEvents() {
     return <div className="alert alert-danger m-5">{eventsError}</div>;
   }
 
+  // Filtrowanie wydarzeń
+  const now = new Date();
+  const upcomingEvents = events
+    .filter(event => new Date(event.eventDate) >= now)
+    .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+  const pastEvents = events
+    .filter(event => new Date(event.eventDate) < now)
+    .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
@@ -64,46 +75,21 @@ function MyEvents() {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container px-5">
             <Link className="navbar-brand" to="/">Eventify</Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">Strona główna</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/MyTickets">Moje bilety</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link>
-                </li>
+                <li className="nav-item"><Link className="nav-link" to="/">Strona główna</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/EventsList">Lista wydarzeń</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/MyTickets">Moje bilety</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link></li>
                 <li className="nav-item dropdown">
-                  <button
-                    className="nav-link dropdown-toggle btn btn-link"
-                    id="navbarDropdownPortfolio"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
+                  <button className="nav-link dropdown-toggle btn btn-link" id="navbarDropdownPortfolio" data-bs-toggle="dropdown">
                     Konto
                   </button>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                    <li>
-                      <button className="dropdown-item" onClick={handleLogout}>
-                        Wyloguj się
-                      </button>
-                    </li>
+                    <li><button className="dropdown-item" onClick={handleLogout}>Wyloguj się</button></li>
                   </ul>
                 </li>
               </ul>
@@ -117,153 +103,108 @@ function MyEvents() {
             <div className="row gx-5 align-items-center justify-content-center">
               <div className="col-lg-8 col-xl-7 col-xxl-6 text-center text-white">
                 <h1 className="display-5 fw-bolder">Twoje ulubione wydarzenia</h1>
-                <p className="lead text-white-50">
-                  Poniżej znajdziesz listę swoich ulubionych wydarzeń
-                </p>
+                <p className="lead text-white-50">Poniżej znajdziesz listę swoich ulubionych wydarzeń</p>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Events List with Filtering */}
-<section className="py-5">
-  <div className="container px-5">
-    <div className="row gx-5 justify-content-center">
-      <div className="col-lg-8">
-        {events.length === 0 ? (
-          <div className="alert alert-info text-center">Brak ulubionych wydarzeń.</div>
-        ) : (
-          <>
-            {/* Filtrujemy wydarzenia */}
-            {(() => {
-              const now = new Date();
-              const upcoming = events
-                .filter(e => new Date(e.eventDate) >= now)
-                .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
-              const past = events
-                .filter(e => new Date(e.eventDate) < now)
-                .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-
-              return (
-                <>
-                  {/* Nadchodzące */}
-                  <h3 className="mb-3">Nadchodzące wydarzenia</h3>
-                  {upcoming.length > 0 ? (
-                    upcoming.map((evt) => (
-                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded">
-                        <h4 className="text-primary">{evt.title}</h4>
-                        <p className="mb-1">
-                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
-                          <strong>Miasto:</strong> {evt.cityName}<br />
-                          <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
-                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
-                          <strong>Cena:</strong> {evt.price} zł
-                        </p>
-                        <div className="d-flex justify-content-between align-items-center mt-3">
-                        <button
-                            className="btn btn-success"
-                            onClick={() => navigate('/BoughtEvents', { state: { event: evt } })}
-                          >
-                            Kup bilet
-                          </button>
-                          <button
-                            className="btn btn-outline-dark"
-                            onClick={async () => {
-                              const token = localStorage.getItem('token');
-                              try {
-                                const res = await fetch(`http://localhost:8085/api/events/${evt.id}/liked`, {
-                                  method: 'DELETE',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                  },
-                                });
-                                if (res.status === 204) {
-                                  alert('Wydarzenie zostało usunięte z listy ulubionych!');
-                                  setEvents((prev) => prev.filter((e) => e.id !== evt.id));
-                                } else {
-                                  throw new Error('Błąd usuwania z ulubionych');
+        {/* Events List */}
+        <section className="py-5">
+          <div className="container px-5">
+            <div className="row gx-5 justify-content-center">
+              <div className="col-lg-8">
+                {events.length === 0 ? (
+                  <div className="alert alert-info text-center">Brak ulubionych wydarzeń.</div>
+                ) : (
+                  <>
+                    {/* Nadchodzące wydarzenia */}
+                    <h3 className="mb-3">Nadchodzące wydarzenia</h3>
+                    {upcomingEvents.length > 0 ? (
+                      upcomingEvents.map(evt => (
+                        <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded">
+                          <h4 className="text-primary">{evt.title}</h4>
+                          <p className="mb-1">
+                            <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                            <strong>Miasto:</strong> {evt.cityName}<br />
+                            <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
+                            {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
+                            <strong>Cena:</strong> {evt.price} zł
+                          </p>
+                          <div className="d-flex justify-content-between align-items-center mt-3">
+                            <button
+                              className="btn btn-success"
+                              onClick={() => navigate('/BoughtEvents', { state: { event: evt } })}
+                            >
+                              Kup bilet
+                            </button>
+                            <button
+                              className="btn btn-outline-dark"
+                              onClick={async () => {
+                                const token = localStorage.getItem('token');
+                                try {
+                                  const res = await fetch(`http://localhost:8085/api/events/${evt.id}/liked`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                      'Authorization': `Bearer ${token}`,
+                                    },
+                                  });
+                                  if (res.status === 204) {
+                                    alert('Wydarzenie zostało usunięte z listy ulubionych!');
+                                    setEvents(prev => prev.filter(e => e.id !== evt.id));
+                                  } else {
+                                    throw new Error('Błąd usuwania z ulubionych');
+                                  }
+                                } catch (err) {
+                                  console.error(err);
+                                  alert('Nie udało się usunąć wydarzenia z ulubionych');
                                 }
-                              } catch (err) {
-                                console.error(err);
-                                alert('Nie udało się usunąć wydarzenia z ulubionych');
-                              }
-                            }}
-                            title="Usuń z ulubionych"
-                          >
-                            🗑
-                          </button>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <div className="alert alert-info">Brak nadchodzących wydarzeń.</div>
-                  )}
+                              }}
+                              title="Usuń z ulubionych"
+                            >
+                              🗑
+                            </button>
+                          </div>
+                        </li>
+                      ))
+                    ) : (
+                      <div className="alert alert-info">Brak nadchodzących wydarzeń.</div>
+                    )}
 
-                  {/* Przeszłe */}
-                  <h3 className="mt-5 mb-3">Historia wydarzeń</h3>
-                  {past.length > 0 ? (
-                    past.map((evt) => (
-                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded bg-light">
-                        <h4 className="text-secondary">{evt.title}</h4>
-                        <p className="mb-1">
-                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
-                          <strong>Miasto:</strong> {evt.cityName}<br />
-                          <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
-                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
-                          <strong>Cena:</strong> {evt.price} zł
-                        </p>
-                        <div className="d-flex justify-content-end align-items-center mt-3">
-                          <button
-                            className="btn btn-outline-dark"
-                            onClick={async () => {
-                              const token = localStorage.getItem('token');
-                              try {
-                                const res = await fetch(`http://localhost:8085/api/events/${evt.id}/liked`, {
-                                  method: 'DELETE',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                  },
-                                });
-                                if (res.status === 204) {
-                                  alert('Wydarzenie zostało usunięte z listy ulubionych!');
-                                  setEvents((prev) => prev.filter((e) => e.id !== evt.id));
-                                } else {
-                                  throw new Error('Błąd usuwania z ulubionych');
-                                }
-                              } catch (err) {
-                                console.error(err);
-                                alert('Nie udało się usunąć wydarzenia z ulubionych');
-                              }
-                            }}
-                            title="Usuń z ulubionych"
-                          >
-                            🗑
-                          </button>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <div className="alert alert-info">Brak zakończonych wydarzeń.</div>
-                  )}
-                </>
-              );
-            })()}
-          </>
-        )}
-      </div>
-    </div>
-  </div>
-</section>
+                    {/* Historia wydarzeń */}
+                    {pastEvents.length > 0 && (
+                      <>
+                        <h3 className="mt-5 mb-3">Historia wydarzeń</h3>
+                        <ul className="list-group">
+                          {pastEvents.map(evt => (
+                            <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded bg-light">
+                              <h4 className="text-secondary">{evt.title}</h4>
+                              <p className="mb-2">
+                                <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                                <strong>Miasto:</strong> {evt.cityName}<br />
+                                <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
+                                {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
+                                <strong>Cena:</strong> {evt.price} zł
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
-</main>
       {/* Footer */}
       <footer className="bg-dark py-4 mt-auto">
         <div className="container px-5">
           <div className="row align-items-center justify-content-between flex-column flex-sm-row">
             <div className="col-auto text-white">&copy; Eventify 2025</div>
-            <div className="col-auto" />
           </div>
         </div>
       </footer>
