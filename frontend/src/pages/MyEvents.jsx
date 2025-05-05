@@ -125,27 +125,47 @@ function MyEvents() {
           </div>
         </header>
 
-        {/* Events List */}
-        <section className="py-5">
-          <div className="container px-5">
-            <div className="row gx-5 justify-content-center">
-              <div className="col-lg-8">
-                <ul className="list-group">
-                  {events.length > 0 ? (
-                    events.map((evt) => (
-                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow-lg rounded">
+        {/* Events List with Filtering */}
+<section className="py-5">
+  <div className="container px-5">
+    <div className="row gx-5 justify-content-center">
+      <div className="col-lg-8">
+        {events.length === 0 ? (
+          <div className="alert alert-info text-center">Brak ulubionych wydarzeń.</div>
+        ) : (
+          <>
+            {/* Filtrujemy wydarzenia */}
+            {(() => {
+              const now = new Date();
+              const upcoming = events
+                .filter(e => new Date(e.eventDate) >= now)
+                .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+              const past = events
+                .filter(e => new Date(e.eventDate) < now)
+                .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+
+              return (
+                <>
+                  {/* Nadchodzące */}
+                  <h3 className="mb-3">Nadchodzące wydarzenia</h3>
+                  {upcoming.length > 0 ? (
+                    upcoming.map((evt) => (
+                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded">
                         <h4 className="text-primary">{evt.title}</h4>
                         <p className="mb-1">
                           <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
                           <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
-                          <strong>Cena:</strong> {evt.price} 
+                          <strong>Cena:</strong> {evt.price} zł
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-3">
-                          <Link to="/Ticket" className="btn btn-success">
+                        <button
+                            className="btn btn-success"
+                            onClick={() => navigate('/BoughtEvents', { state: { event: evt } })}
+                          >
                             Kup bilet
-                          </Link>
+                          </button>
                           <button
                             className="btn btn-outline-dark"
                             onClick={async () => {
@@ -177,17 +197,67 @@ function MyEvents() {
                       </li>
                     ))
                   ) : (
-                    <li className="list-group-item text-center">
-                      Brak ulubionych wydarzeń.
-                    </li>
+                    <div className="alert alert-info">Brak nadchodzących wydarzeń.</div>
                   )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
 
+                  {/* Przeszłe */}
+                  <h3 className="mt-5 mb-3">Historia wydarzeń</h3>
+                  {past.length > 0 ? (
+                    past.map((evt) => (
+                      <li key={evt.id} className="list-group-item p-4 mb-3 shadow rounded bg-light">
+                        <h4 className="text-secondary">{evt.title}</h4>
+                        <p className="mb-1">
+                          <strong>Data:</strong> {new Date(evt.eventDate).toLocaleString()}<br />
+                          <strong>Miasto:</strong> {evt.cityName}<br />
+                          <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
+                          {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
+                          <strong>Cena:</strong> {evt.price} zł
+                        </p>
+                        <div className="d-flex justify-content-end align-items-center mt-3">
+                          <button
+                            className="btn btn-outline-dark"
+                            onClick={async () => {
+                              const token = localStorage.getItem('token');
+                              try {
+                                const res = await fetch(`http://localhost:8085/api/events/${evt.id}/liked`, {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`,
+                                  },
+                                });
+                                if (res.status === 204) {
+                                  alert('Wydarzenie zostało usunięte z listy ulubionych!');
+                                  setEvents((prev) => prev.filter((e) => e.id !== evt.id));
+                                } else {
+                                  throw new Error('Błąd usuwania z ulubionych');
+                                }
+                              } catch (err) {
+                                console.error(err);
+                                alert('Nie udało się usunąć wydarzenia z ulubionych');
+                              }
+                            }}
+                            title="Usuń z ulubionych"
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <div className="alert alert-info">Brak zakończonych wydarzeń.</div>
+                  )}
+                </>
+              );
+            })()}
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
       {/* Footer */}
       <footer className="bg-dark py-4 mt-auto">
         <div className="container px-5">

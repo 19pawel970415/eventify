@@ -66,15 +66,20 @@ function EventsList() {
     fetchCities();
   }, []);
 
-  const filteredEvents = events.filter(evt => {
+  const filteredEvents = events
+  .filter(evt => {
     const matchesCity = selectedCity ? evt.cityName === selectedCity : true;
     const matchesDate = selectedDate ? evt.eventDate.startsWith(selectedDate) : true;
-    return matchesCity && matchesDate;
-  });
+    const eventDate = new Date(evt.eventDate);
+    return matchesCity && matchesDate && eventDate >= new Date(); // filtruj tylko przyszłe wydarzenia
+  })
+  .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate)); // sortuj rosnąco według daty
 
   if (eventsError) {
     return <div className="alert alert-danger m-5">{eventsError}</div>;
   }
+
+
 
   return (
     <div className="d-flex flex-column h-100">
@@ -221,7 +226,7 @@ function EventsList() {
                           <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber} 
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''} <br />
-                          <strong>Cena:</strong> {evt.price} 
+                          <strong>Cena:</strong> {evt.price} {"zł"}
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-3">
                           {isAuthenticated ? (

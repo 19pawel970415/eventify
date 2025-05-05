@@ -40,7 +40,8 @@ function Home() {
   const upcomingEvents = events.filter(evt => {
     const eventDate = new Date(evt.eventDate);
     return eventDate >= now && eventDate <= sevenDaysLater;
-  });
+  })
+  .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
 
   return (
     <div className="d-flex flex-column h-100">
@@ -130,7 +131,7 @@ function Home() {
                           <strong>Miasto:</strong> {evt.cityName}<br />
                           <strong>Adres:</strong> {evt.street} {evt.buildingNumber}
                           {evt.apartmentNumber ? `/${evt.apartmentNumber}` : ''}<br />
-                          <strong>Cena:</strong> {evt.price} 
+                          <strong>Cena:</strong> {evt.price} {"zł"}
                         </p>
                       </li>
                     ))
