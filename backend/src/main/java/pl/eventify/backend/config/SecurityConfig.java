@@ -50,7 +50,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config
     ) throws Exception {
-        return config.getAuthenticationManager();  // Use the default AuthenticationManager provided by Spring
+        return config.getAuthenticationManager();
     }
 
     @Bean

@@ -7,14 +7,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.eventify.backend.dto.BoughtEventRequestDto;
 import pl.eventify.backend.dto.EventDto;
+import pl.eventify.backend.exception.ResourceNotFoundException;
 import pl.eventify.backend.model.BoughtEvent;
+import pl.eventify.backend.model.User;
 import pl.eventify.backend.repository.BoughtEventRepository;
+import pl.eventify.backend.repository.UserRepository;
+import pl.eventify.backend.service.BoughtEventService;
 import pl.eventify.backend.service.EventService;
 import pl.eventify.backend.service.LikedEventService;
-import pl.eventify.backend.repository.UserRepository;
-import pl.eventify.backend.model.User;
-import pl.eventify.backend.service.BoughtEventService;
-import pl.eventify.backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,12 +47,6 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getEventById(@PathVariable Long id) {
-        EventDto dto = eventService.getEventById(id);
-        return ResponseEntity.ok(dto);
-    }
-
     @PostMapping("/{id}/like")
     public ResponseEntity<Void> likeEvent(@PathVariable("id") Long eventId,
                                           Authentication authentication) {
@@ -68,7 +62,7 @@ public class EventController {
     public ResponseEntity<List<EventDto>> getLikedEvents(Authentication auth) {
         String email = auth.getName();
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User","email",email));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
         List<EventDto> liked = likedEventService.getLikedEventsForUser(user.getId())
                 .stream()
@@ -84,7 +78,7 @@ public class EventController {
                                             Authentication auth) {
         String email = auth.getName();
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User","email",email));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
         likedEventService.unlikeEvent(user.getId(), eventId);
         return ResponseEntity.noContent().build();
     }
@@ -93,7 +87,7 @@ public class EventController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> buyTicket(
             @PathVariable Long eventId,
-            @RequestBody BoughtEventRequestDto dto,      // <— tutaj zmiana
+            @RequestBody BoughtEventRequestDto dto,
             Authentication authentication
     ) {
         String userEmail = authentication.getName();
@@ -112,25 +106,18 @@ public class EventController {
     }
 
 
-
     @GetMapping("/bought_events")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<EventDto>> getBoughtEvents(Authentication auth) {
-        // pobierz zalogowanego użytkownika
         String email = auth.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        // pobierz wpisy bought_events dla użytkownika
         List<BoughtEvent> boughtEvents = boughtEventRepository.findAllByUserId(user.getId());
 
-        // zmapuj na EventDto rozszerzone o amount i priceAll
         List<EventDto> dtos = boughtEvents.stream()
                 .map(be -> {
-                    // najpierw pobierz podstawowy EventDto
                     EventDto base = eventService.getEventById(be.getEvent().getId());
-
-                    // rozbuduj go o dane z bought_events
                     return EventDto.builder()
                             .id(base.getId())
                             .title(base.getTitle())
@@ -146,8 +133,8 @@ public class EventController {
                             .apartmentNumber(base.getApartmentNumber())
                             .postalCode(base.getPostalCode())
                             .price(base.getPrice())
-                            .amount(be.getAmount())           // z tabeli bought_events
-                            .priceAll(be.getPriceAll())       // z tabeli bought_events
+                            .amount(be.getAmount())
+                            .priceAll(be.getPriceAll())
                             .build();
                 })
                 .collect(Collectors.toList());

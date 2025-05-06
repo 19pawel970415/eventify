@@ -1,6 +1,9 @@
 package pl.eventify.backend.controllers;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.eventify.backend.model.City;
 import pl.eventify.backend.service.CityService;
 
@@ -11,12 +14,11 @@ import java.util.List;
 @RequestMapping("/api/cities")
 public class CityController {
 
+    private final CityService cityService;
 
-        private final CityService cityService;
-
-        public CityController(CityService cityService) {
-            this.cityService = cityService;
-        }
+    public CityController(CityService cityService) {
+        this.cityService = cityService;
+    }
 
     @GetMapping
     public ResponseEntity<List<City>> getAllCities() {
