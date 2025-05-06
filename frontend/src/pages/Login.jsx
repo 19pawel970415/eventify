@@ -5,7 +5,6 @@ import '../css/styles.css';
 import React from 'react';
 import Register from './Register';
 import EventsList from './EventsList';
-import HomeUser from './HomeUser';
 
 function Login() {
   const [email, setEmail] = useState('');
