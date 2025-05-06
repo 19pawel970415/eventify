@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/styles.css';
 import React from 'react';
-import Register from './Register';
-import EventsList from './EventsList';
+
 
 function Login() {
   const [email, setEmail] = useState('');

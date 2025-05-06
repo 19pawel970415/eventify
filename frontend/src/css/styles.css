@@ -162,6 +162,10 @@ h5, .h5 {
 h6, .h6 {
   font-size: 1rem;
 }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
 
 p {
   margin-top: 0;

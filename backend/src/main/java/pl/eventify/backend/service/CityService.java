@@ -19,7 +19,7 @@ public class CityService {
     }
 
     /**
-     * Pobierz wszystkie miasta.
+     * Pobaierz wszystkie miasta.
      */
     public List<City> getAllCities() {
         return cityRepository.findAll();
