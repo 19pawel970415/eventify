@@ -168,7 +168,7 @@ function EventsList() {
             <div className="row gx-5 align-items-center justify-content-center">
               <div className="col-lg-8 col-xl-7 col-xxl-6 text-center text-white">
                 <h1 className="display-5 fw-bolder">Lista wydarzeń</h1>
-                <p className="lead text-white-50">Przeglądaj wydarzenia w różnych miastach i na różne daty.</p>
+                <p className="lead text-white-50">Zapoznaj się ze wszystkimi dostępnymi wydarzeniami. Filtruj po miastach, w których sie odbywają oraz datach.</p>
               </div>
             </div>
           </div>
@@ -298,16 +298,9 @@ function EventsList() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-dark py-4 mt-auto">
-        <div className="container px-5">
-          <div className="row align-items-center justify-content-between flex-column flex-sm-row">
-            <div className="col-auto text-white">
-              &copy; Eventify 2025
-            </div>
-            <div className="col-auto">
-
-            </div>
-          </div>
+      <footer className="bg-dark py-4 mt-auto text-white">
+        <div className="container text-center">
+          &copy; Eventify 2025
         </div>
       </footer>
     </div>

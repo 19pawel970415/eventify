@@ -201,11 +201,9 @@ function MyEvents() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-dark py-4 mt-auto">
-        <div className="container px-5">
-          <div className="row align-items-center justify-content-between flex-column flex-sm-row">
-            <div className="col-auto text-white">&copy; Eventify 2025</div>
-          </div>
+      <footer className="bg-dark py-4 mt-auto text-white">
+        <div className="container text-center">
+          &copy; Eventify 2025
         </div>
       </footer>
     </div>

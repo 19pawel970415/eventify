@@ -97,7 +97,7 @@ function MyTickets() {
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center text-white">
                 <h1 className="display-5 fw-bolder">Twoje bilety</h1>
-                <p className="lead text-white-50">Poniżej znajdują się wszystkie zakupione bilety podzielone na nadchodzące i przeszłe wydarzenia.</p>
+                <p className="lead text-white-50">Poniżej znajdują się wszystkie zakupione pzrez Ciebie bilety na wydarzenia.</p>
               </div>
             </div>
           </div>
