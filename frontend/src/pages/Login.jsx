@@ -74,10 +74,9 @@ function Login() {
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navbar */}
+
        <NavbarWithAuth />
 
-        {/* Logowanie */}
         <section className="py-5">
           <div className="container px-5">
             <div className="row justify-content-center">
@@ -142,7 +141,6 @@ function Login() {
         </section>
       </main>
 
-      {/* Footer */}
       <Footer/>
     </div>
   );

@@ -78,10 +78,8 @@ function EventsList() {
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navbar */}
         <NavbarWithAuth />
 
-        {/* Header */}
         <header className="bg-dark py-5">
           <div className="container px-5">
             <div className="row gx-5 align-items-center justify-content-center">
@@ -93,7 +91,6 @@ function EventsList() {
           </div>
         </header>
 
-        {/* Filters */}
         <section className="py-4">
           <div className="container px-5">
             <div className="row g-3 justify-content-center">
@@ -130,7 +127,6 @@ function EventsList() {
           </div>
         </section>
 
-        {/* Events List */}
         <section className="py-5">
           <div className="container px-5">
             <div className="row gx-5 justify-content-center">
@@ -216,7 +212,6 @@ function EventsList() {
         </section>
       </main>
 
-      {/* Footer */}
       <Footer/>
     </div>
   );

@@ -7,7 +7,6 @@ function MyTickets() {
   const [tickets, setTickets] = useState([]);
   const [error, setError] = useState('');
 
-  // Sprawdzenie, czy użytkownik jest zalogowany
    useAuthRedirect(() => {});
 
   useEffect(() => {
@@ -38,16 +37,13 @@ function MyTickets() {
   }, []);
 
   const now = new Date();
-  // Nadchodzące wydarzenia (data >= teraz)
   const upcomingEvents = tickets
     .filter(event => new Date(event.eventDate) >= now)
     .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
-  // Przeszłe wydarzenia (data < teraz)
+
   const pastEvents = tickets
     .filter(event => new Date(event.eventDate) < now)
     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-
-  
 
   return (
     <div className="d-flex flex-column h-100">
@@ -75,7 +71,6 @@ function MyTickets() {
                   <div className="alert alert-info text-center">Brak zakupionych biletów.</div>
                 ) : (
                   <>
-                    {/* Nadchodzące wydarzenia */}
                     {upcomingEvents.length > 0 ? (
                       <>
                         <h3 className="mb-3">Nadchodzące wydarzenia</h3>
@@ -99,7 +94,6 @@ function MyTickets() {
                       <div className="alert alert-info text-center">Brak nadchodzących wydarzeń.</div>
                     )}
 
-                    {/* Historia wydarzeń */}
                     {pastEvents.length > 0 && (
                       <>
                         <h3 className="mt-5 mb-3">Historia wydarzeń</h3>

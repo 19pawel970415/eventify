@@ -9,14 +9,8 @@ function MyEvents() {
   const [events, setEvents] = useState([]);
   const [eventsError, setEventsError] = useState('');
 
-
-  // Sprawdzenie, czy użytkownik jest zalogowany
   useAuthRedirect(() => {});
 
-  // Funkcja obsługi wylogowania
-
-
-  // Pobranie ulubionych wydarzeń
   useEffect(() => {
     const fetchWithAuth = async (url) => {
       const token = localStorage.getItem('token');
@@ -46,7 +40,6 @@ function MyEvents() {
     return <div className="alert alert-danger m-5">{eventsError}</div>;
   }
 
-  // Filtrowanie wydarzeń
   const now = new Date();
   const upcomingEvents = events
     .filter(event => new Date(event.eventDate) >= now)
@@ -58,10 +51,8 @@ function MyEvents() {
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navbar */}
        <NavbarWihtAuth />
 
-        {/* Header */}
         <header className="bg-dark py-5">
           <div className="container px-5">
             <div className="row gx-5 align-items-center justify-content-center">
@@ -73,7 +64,6 @@ function MyEvents() {
           </div>
         </header>
 
-        {/* Events List */}
         <section className="py-5">
           <div className="container px-5">
             <div className="row gx-5 justify-content-center">
@@ -82,7 +72,6 @@ function MyEvents() {
                   <div className="alert alert-info text-center">Brak ulubionych wydarzeń.</div>
                 ) : (
                   <>
-                    {/* Nadchodzące wydarzenia */}
                     <h3 className="mb-3">Nadchodzące wydarzenia</h3>
                     {upcomingEvents.length > 0 ? (
                       upcomingEvents.map(evt => (
@@ -136,7 +125,6 @@ function MyEvents() {
                       <div className="alert alert-info">Brak nadchodzących wydarzeń.</div>
                     )}
 
-                    {/* Historia wydarzeń */}
                     {pastEvents.length > 0 && (
                       <>
                         <h3 className="mt-5 mb-3">Historia wydarzeń</h3>
@@ -164,7 +152,6 @@ function MyEvents() {
         </section>
       </main>
 
-      {/* Footer */}
       <Footer/>
     </div>
   );

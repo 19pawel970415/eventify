@@ -78,7 +78,7 @@ function BoughtEvents() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <main className="flex-shrink-0">
-        {/* Navbar */}
+
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container px-5">
             <Link className="navbar-brand" to="/">Eventify</Link>
@@ -118,7 +118,6 @@ function BoughtEvents() {
           </div>
         </nav>
 
-        {/* Header */}
         <header className="bg-dark py-5">
           <div className="container px-5">
             <div className="row gx-5 justify-content-center">
@@ -132,7 +131,6 @@ function BoughtEvents() {
           </div>
         </header>
 
-        {/* Bilet */}
         <section className="py-5">
           <div className="container">
             <div className="card shadow-lg p-4">
@@ -148,9 +146,7 @@ function BoughtEvents() {
                 <span>{ticketCount}</span>
                 <button className="btn btn-outline-secondary ms-2" onClick={handleIncrease}>+</button>
               </div>
-
               <h4 className="text-success mt-3">Cena końcowa: {finalPrice.toFixed(2)} zł</h4>
-
               <button className="btn btn-success" onClick={handlePurchase}>
                 Potwierdź zakup
               </button>
@@ -159,7 +155,6 @@ function BoughtEvents() {
         </section>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

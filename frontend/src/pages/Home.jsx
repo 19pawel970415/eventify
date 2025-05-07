@@ -20,10 +20,9 @@ function Home() {
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navigation */}
+
        <NavbarWithAuth />
 
-        {/* Header */}
         <header className="bg-dark py-5">
           <div className="container px-5">
             <div className="row gx-5 align-items-center justify-content-center">
@@ -40,7 +39,6 @@ function Home() {
         </header>
       </main>
 
-      {/* Upcoming Events Section */}
       <section className="py-5 bg-light">
         <div className="container px-5">
           <h2 className="mb-4 text-center">Wydarzenia w ciągu najbliższych 7 dni</h2>
@@ -68,7 +66,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer */}
      <Footer/>
     </div>
   );

@@ -19,7 +19,7 @@ function Register() {
   };
 
   const validatePassword = (password) => {
-    const re = /^(?=.*\d).{8,}$/; // Minimum 8 znaków i przynajmniej jedna cyfra
+    const re = /^(?=.*\d).{8,}$/; 
     return re.test(password);
   };
 
@@ -63,7 +63,6 @@ function Register() {
           setErrors({ api: errorBody.message || 'Błąd rejestracji' });
         } else {
           setSuccess(true);
-          // opcjonalnie zapis userDto, np. const userDto = await response.json();
           setTimeout(() => navigate('/login'), 2000);
         }
       } catch (err) {
@@ -75,10 +74,8 @@ function Register() {
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        {/* Navigation */}
         <NavbarWithAuth />
 
-        {/* Rejestracja */}
         <section className="py-5">
           <div className="container px-5">
             <div className="row justify-content-center">
@@ -168,7 +165,6 @@ function Register() {
         </section>
       </main>
 
-      {/* Footer */}
        <Footer/>
     </div>
   );
