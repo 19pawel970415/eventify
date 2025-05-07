@@ -9,7 +9,8 @@ public class UserDto {
     private String email;
     private Instant createdAt;
 
-    public UserDto() { }
+    public UserDto() {
+    }
 
     public UserDto(Long id, String name, String email, Instant createdAt) {
         this.id = id;

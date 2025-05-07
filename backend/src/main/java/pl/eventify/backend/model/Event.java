@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-
 import java.math.BigDecimal;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -62,13 +60,10 @@ public class Event {
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    // --- lifecycle callback to set createdAt ---
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
-    // --- getters & setters ---
 
     public Long getId() {
         return id;
@@ -77,6 +72,7 @@ public class Event {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -84,6 +80,7 @@ public class Event {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -91,6 +88,7 @@ public class Event {
     public LocalDateTime getEventDate() {
         return eventDate;
     }
+
     public void setEventDate(LocalDateTime eventDate) {
         this.eventDate = eventDate;
     }
@@ -98,6 +96,7 @@ public class Event {
     public User getOrganizer() {
         return organizer;
     }
+
     public void setOrganizer(User organizer) {
         this.organizer = organizer;
     }
@@ -105,6 +104,7 @@ public class Event {
     public City getCity() {
         return city;
     }
+
     public void setCity(City city) {
         this.city = city;
     }
@@ -120,6 +120,7 @@ public class Event {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
     public void setStreet(String street) {
         this.street = street;
     }
@@ -127,6 +128,7 @@ public class Event {
     public String getBuildingNumber() {
         return buildingNumber;
     }
+
     public void setBuildingNumber(String buildingNumber) {
         this.buildingNumber = buildingNumber;
     }
@@ -134,6 +136,7 @@ public class Event {
     public String getApartmentNumber() {
         return apartmentNumber;
     }
+
     public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
@@ -141,6 +144,7 @@ public class Event {
     public String getPostalCode() {
         return postalCode;
     }
+
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

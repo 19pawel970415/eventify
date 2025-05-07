@@ -7,14 +7,18 @@ public class BoughtEventRequestDto {
     private int amount;
     private double priceAll;
 
-    public BoughtEventRequestDto() {}  // <-- konieczny domyślny
+    public BoughtEventRequestDto() {
+    }
 
-    public LocalDateTime getEventDate() { return eventDate; }
-    public void setEventDate(LocalDateTime eventDate) { this.eventDate = eventDate; }
+    public LocalDateTime getEventDate() {
+        return eventDate;
+    }
 
-    public int getAmount() { return amount; }
-    public void setAmount(int amount) { this.amount = amount; }
+    public int getAmount() {
+        return amount;
+    }
 
-    public double getPriceAll() { return priceAll; }
-    public void setPriceAll(double priceAll) { this.priceAll = priceAll; }
+    public double getPriceAll() {
+        return priceAll;
+    }
 }

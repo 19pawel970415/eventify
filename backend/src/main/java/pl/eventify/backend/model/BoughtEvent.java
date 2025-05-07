@@ -1,7 +1,7 @@
 package pl.eventify.backend.model;
 
-
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -70,6 +70,4 @@ public class BoughtEvent {
     public void setPriceAll(double priceAll) {
         this.priceAll = priceAll;
     }
-
-
 }

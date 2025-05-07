@@ -113,7 +113,7 @@ public class EventController {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        List<BoughtEvent> boughtEvents = boughtEventRepository.findAllByUserId(user.getId());
+        List<BoughtEvent> boughtEvents = boughtEventService.getBoughtEventsForUser(user.getId());
 
         List<EventDto> dtos = boughtEvents.stream()
                 .map(be -> {

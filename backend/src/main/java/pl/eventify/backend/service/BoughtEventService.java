@@ -28,11 +28,6 @@ public class BoughtEventService {
         this.eventRepo = eventRepo;
     }
 
-    /**
-     * Zapisuje w bazie relację „user kupił event”.
-     * @param userId  ID zalogowanego użytkownika
-     * @param eventId ID wydarzenia
-     */
     @Transactional
     public void buyTicket(Long userId, Long eventId, LocalDateTime eventDate, int amount, double priceAll) {
         User user = userRepo.findById(userId)

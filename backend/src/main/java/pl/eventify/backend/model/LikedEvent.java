@@ -1,6 +1,7 @@
 package pl.eventify.backend.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,12 +24,13 @@ public class LikedEvent {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public LikedEvent() {}
+    public LikedEvent() {
+    }
 
     public LikedEvent(User user, Event event) {
-        this.user  = user;
+        this.user = user;
         this.event = event;
-        this.id    = new LikedEventId(user.getId(), event.getId());
+        this.id = new LikedEventId(user.getId(), event.getId());
     }
 
     public LikedEventId getId() {
@@ -46,6 +48,4 @@ public class LikedEvent {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-
 }

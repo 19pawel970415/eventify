@@ -2,12 +2,9 @@ package pl.eventify.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.eventify.backend.dto.CreateEventDto;
 import pl.eventify.backend.dto.EventDto;
 import pl.eventify.backend.exception.ResourceNotFoundException;
-import pl.eventify.backend.model.City;
 import pl.eventify.backend.model.Event;
-import pl.eventify.backend.model.User;
 import pl.eventify.backend.repository.EventRepository;
 
 import java.util.List;
@@ -29,9 +26,6 @@ public class EventService {
         this.userService = userService;
     }
 
-    /**
-     * Pobierz wszystkie wydarzenia jako DTO.
-     */
     public List<EventDto> getAllEvents() {
         return eventRepository.findAll()
                 .stream()
@@ -39,18 +33,12 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Pobierz wydarzenie po id.
-     */
     public EventDto getEventById(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "id", id));
         return mapToDto(event);
     }
 
-    /**
-     * Pomocnicze mapowanie z encji na DTO.
-     */
     private EventDto mapToDto(Event event) {
         return EventDto.builder()
                 .id(event.getId())

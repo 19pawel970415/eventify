@@ -3,14 +3,14 @@ package pl.eventify.backend.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.eventify.backend.exception.AlreadyLikedException;
+import pl.eventify.backend.exception.ResourceNotFoundException;
+import pl.eventify.backend.model.Event;
 import pl.eventify.backend.model.LikedEvent;
 import pl.eventify.backend.model.LikedEventId;
 import pl.eventify.backend.model.User;
-import pl.eventify.backend.model.Event;
+import pl.eventify.backend.repository.EventRepository;
 import pl.eventify.backend.repository.LikedEventRepository;
 import pl.eventify.backend.repository.UserRepository;
-import pl.eventify.backend.repository.EventRepository;
-import pl.eventify.backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -24,16 +24,11 @@ public class LikedEventService {
     public LikedEventService(LikedEventRepository likedRepo,
                              UserRepository userRepo,
                              EventRepository eventRepo) {
-        this.likedRepo  = likedRepo;
-        this.userRepo   = userRepo;
-        this.eventRepo  = eventRepo;
+        this.likedRepo = likedRepo;
+        this.userRepo = userRepo;
+        this.eventRepo = eventRepo;
     }
 
-    /**
-     * Zapisuje w bazie relację „user polubił event”.
-     * @param userId  ID zalogowanego użytkownika
-     * @param eventId ID wydarzenia
-     */
     @Transactional
     public void likeEvent(Long userId, Long eventId) {
         User user = userRepo.findById(userId)
@@ -63,5 +58,4 @@ public class LikedEventService {
         }
         likedRepo.deleteById(key);
     }
-
 }

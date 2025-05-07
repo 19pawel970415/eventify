@@ -149,7 +149,6 @@ public class EventDto {
         }
     }
 
-    // --- Getters ---
     public Long getId() {
         return id;
     }

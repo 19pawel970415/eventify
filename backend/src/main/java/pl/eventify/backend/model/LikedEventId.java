@@ -1,10 +1,10 @@
-
 package pl.eventify.backend.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 import java.util.Objects;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class LikedEventId implements Serializable {
@@ -16,7 +16,8 @@ public class LikedEventId implements Serializable {
     @Column(name = "event_id")
     private Long eventId;
 
-    public LikedEventId() {}
+    public LikedEventId() {
+    }
 
     public LikedEventId(Long userId, Long eventId) {
         this.userId = userId;
@@ -26,12 +27,15 @@ public class LikedEventId implements Serializable {
     public Long getUserId() {
         return userId;
     }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
     public Long getEventId() {
         return eventId;
     }
+
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
