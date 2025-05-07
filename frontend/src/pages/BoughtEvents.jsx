@@ -9,7 +9,6 @@ function BoughtEvents() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
 
-   // Sprawdzenie, czy użytkownik jest zalogowany
   useAuthRedirect(setIsAuthenticated);
 
   const event = location.state?.event;

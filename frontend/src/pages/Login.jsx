@@ -18,7 +18,7 @@ function Login() {
   };
 
   const validatePassword = (password) => {
-    const re = /^(?=.*\d).{8,}$/; // Minimum 8 znaków i przynajmniej jedna cyfra
+    const re = /^(?=.*\d).{8,}$/;
     return re.test(password);
   };
 

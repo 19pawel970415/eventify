@@ -65,9 +65,9 @@ function EventsList() {
     const matchesCity = selectedCity ? evt.cityName === selectedCity : true;
     const matchesDate = selectedDate ? evt.eventDate.startsWith(selectedDate) : true;
     const eventDate = new Date(evt.eventDate);
-    return matchesCity && matchesDate && eventDate >= new Date(); // filtruj tylko przyszłe wydarzenia
+    return matchesCity && matchesDate && eventDate >= new Date();
   })
-  .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate)); // sortuj rosnąco według daty
+  .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
 
   if (eventsError) {
     return <div className="alert alert-danger m-5">{eventsError}</div>;
