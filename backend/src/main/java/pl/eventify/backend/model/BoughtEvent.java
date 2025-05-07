@@ -20,6 +20,8 @@ public class BoughtEvent {
 
     private LocalDateTime eventDate;
 
+    private LocalDateTime createdAt;
+
     private int amount;
     private double priceAll;
 
@@ -69,5 +71,9 @@ public class BoughtEvent {
 
     public void setPriceAll(double priceAll) {
         this.priceAll = priceAll;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
