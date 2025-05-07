@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/styles.css';
+import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
+import NavbarWithAuth from '../components/NavbarWithAuth'
 
 function EventsList() {
   const [events, setEvents] = useState([]);
@@ -19,12 +19,6 @@ function EventsList() {
     setIsAuthenticated(!!token);
   }, []);
 
-  const handleLogout = () => {
-    alert('Nastąpiło wylogowanie z konta.');
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-    navigate('/');
-  };
 
   const fetchWithAuth = async (url) => {
     const token = localStorage.getItem('token');
@@ -85,82 +79,7 @@ function EventsList() {
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
         {/* Navbar */}
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div className="container px-5">
-            <Link className="navbar-brand" to="/">Eventify</Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                {isAuthenticated ? (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/">Strona główna</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/MyTickets">Moje bilety</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link>
-                    </li>
-                    <li className="nav-item dropdown">
-                      <button
-                        className="nav-link dropdown-toggle btn btn-link"
-                        id="navbarDropdownPortfolio"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Konto
-                      </button>
-                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                        <li>
-                          <button className="dropdown-item" onClick={handleLogout}>
-                            Wyloguj się
-                          </button>
-                        </li>
-                      </ul>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/">Strona główna</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
-                    </li>
-                    <li className="nav-item dropdown">
-                      <button
-                        className="nav-link dropdown-toggle btn btn-link"
-                        id="navbarDropdownPortfolio"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Konto
-                      </button>
-                      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                        <li><Link className="dropdown-item" to="/Login">Logowanie</Link></li>
-                        <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
-                      </ul>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <NavbarWithAuth />
 
         {/* Header */}
         <header className="bg-dark py-5">
@@ -298,11 +217,7 @@ function EventsList() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-dark py-4 mt-auto text-white">
-        <div className="container text-center">
-          &copy; Eventify 2025
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 }

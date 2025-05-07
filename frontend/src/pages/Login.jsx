@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/styles.css';
 import React from 'react';
-
+import Footer from '../components/Footer';
+import NavbarWithAuth from '../components/NavbarWithAuth'
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -76,39 +75,7 @@ function Login() {
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
         {/* Navbar */}
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div className="container px-5">
-            <Link className="navbar-brand" to="/">Eventify</Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">Strona główna</Link>
-
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/EventsList">Lista wydarzeń</Link>
-                </li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Konto</a>
-                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                    <li><Link className="dropdown-item" to="/Register">Rejestracja</Link></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+       <NavbarWithAuth />
 
         {/* Logowanie */}
         <section className="py-5">
@@ -176,11 +143,7 @@ function Login() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-dark py-4 mt-auto text-white">
-        <div className="container text-center">
-          &copy; Eventify 2025
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 }

@@ -1,35 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/styles.css';
+import Footer from '../components/Footer';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
 
 function BoughtEvents() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
-  const alerted = useRef(false);
+
+   // Sprawdzenie, czy użytkownik jest zalogowany
+  useAuthRedirect(setIsAuthenticated);
 
   const event = location.state?.event;
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const isAuth = Boolean(token);
-    setIsAuthenticated(isAuth);
-
-    if (!isAuth && !alerted.current) {
-      alerted.current = true;
-      alert('Zaloguj się, aby kontynuować zakup biletu.');
-      navigate('/Login', { replace: true });
-    }
-  }, [navigate]);
-
-  const handleLogout = () => {
-    alert('Nastąpiło wylogowanie z konta.');
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-    navigate('/', { replace: true });
-  };
 
   if (!event) {
     return <div className="alert alert-danger m-5">Nie wybrano wydarzenia.</div>;
@@ -49,6 +32,13 @@ function BoughtEvents() {
 
   const handleIncrease = () => setTicketCount((prev) => prev + 1);
   const handleDecrease = () => setTicketCount((prev) => (prev > 1 ? prev - 1 : 1));
+
+  const handleLogout = () => {
+    alert('Nastąpiło wylogowanie z konta.');
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/', { replace: true });
+  };
 
   const handlePurchase = async () => {
     const token = localStorage.getItem('token');
@@ -85,7 +75,6 @@ function BoughtEvents() {
     }
   };
 
-
   return (
     <div className="d-flex flex-column min-vh-100">
       <main className="flex-shrink-0">
@@ -93,15 +82,7 @@ function BoughtEvents() {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container px-5">
             <Link className="navbar-brand" to="/">Eventify</Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -155,8 +136,7 @@ function BoughtEvents() {
         <section className="py-5">
           <div className="container">
             <div className="card shadow-lg p-4">
-
-              <h3><strong></strong> {title}</h3>
+              <h3>{title}</h3>
               <p><strong>Data:</strong> {new Date(eventDate).toLocaleString()}</p>
               <p><strong>Miasto:</strong> {cityName}</p>
               <p><strong>Adres:</strong> {street} {buildingNumber}{apartmentNumber ? `/${apartmentNumber}` : ''}</p>
@@ -180,11 +160,7 @@ function BoughtEvents() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-dark py-4 mt-auto text-white">
-        <div className="container text-center">
-          &copy; Eventify 2025
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

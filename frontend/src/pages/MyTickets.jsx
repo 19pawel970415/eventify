@@ -1,25 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/styles.css';
+import React, { useEffect, useState } from 'react';
+import Footer from '../components/Footer';
+import NavbarWithAuth from '../components/NavbarWithAuth';
+import { useAuthRedirect } from '../hooks/useAuthRedirect';
 
 function MyTickets() {
-  const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [error, setError] = useState('');
-  const alerted = useRef(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token && !alerted.current) {
-      alerted.current = true;
-      alert(
-        'Dostęp do tej strony posiadają tylko zalogowani użytkownicy. ' +
-        'Zaloguj się, by otrzymać dostęp do swoich biletów!'
-      );
-      navigate('/Login', { replace: true });
-    }
-  }, [navigate]);
+  // Sprawdzenie, czy użytkownik jest zalogowany
+   useAuthRedirect(() => {});
 
   useEffect(() => {
     const fetchWithAuth = async (url) => {
@@ -58,39 +47,12 @@ function MyTickets() {
     .filter(event => new Date(event.eventDate) < now)
     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
 
-  const handleLogout = () => {
-    alert('Nastąpiło wylogowanie z konta.');
-    localStorage.removeItem('token');
-    navigate('/', { replace: true });
-  };
+  
 
   return (
     <div className="d-flex flex-column h-100">
       <main className="flex-shrink-0">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div className="container px-5">
-            <Link className="navbar-brand" to="/">Eventify</Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav ms-auto">
-                <li className="nav-item"><Link className="nav-link" to="/">Strona główna</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/EventsList">Lista wydarzeń</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/MyTickets">Moje bilety</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/MyEvents">Polubione wydarzenia</Link></li>
-                <li className="nav-item dropdown">
-                  <button className="nav-link dropdown-toggle btn btn-link" id="userDropdown" data-bs-toggle="dropdown">
-                    Konto
-                  </button>
-                  <ul className="dropdown-menu dropdown-menu-end">
-                    <li><button className="dropdown-item" onClick={handleLogout}>Wyloguj się</button></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <NavbarWithAuth />
 
         <header className="bg-dark py-5">
           <div className="container px-5">
@@ -166,11 +128,7 @@ function MyTickets() {
         </section>
       </main>
 
-      <footer className="bg-dark py-4 mt-auto text-white">
-        <div className="container text-center">
-          &copy; Eventify 2025
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 }
